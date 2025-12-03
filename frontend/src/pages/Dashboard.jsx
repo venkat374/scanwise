@@ -372,9 +372,34 @@ export default function Dashboard() {
                     {/* Results Section */}
                     <div className="lg:col-span-2">
                         {!result ? (
-                            <div className="h-full flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-zinc-800 rounded-xl min-h-[400px]">
-                                <Scan className="w-16 h-16 mb-4 opacity-20" />
-                                <p>Select a product or scan ingredients to begin analysis.</p>
+                            <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50">
+                                <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-6">
+                                    <Scan className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                                    Ready to Analyze
+                                </h3>
+                                <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-8">
+                                    Select a product from the search, scan a barcode, or upload an ingredient list to get a detailed toxicity report.
+                                </p>
+                                <div className="grid grid-cols-2 gap-4 text-sm text-slate-400 dark:text-slate-500">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        <span>Toxicity Score</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                        <span>Ingredient Risk</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                        <span>Skin Compatibility</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-purple-500" />
+                                        <span>Better Alternatives</span>
+                                    </div>
+                                </div>
                             </div>
                         ) : (
                             <div className="space-y-6">

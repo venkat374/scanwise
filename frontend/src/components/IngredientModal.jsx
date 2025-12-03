@@ -53,27 +53,38 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
         }
     }, [ingredientName]);
 
+    useEffect(() => {
+        // Prevent body scrolling when modal is open
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
+
     if (!ingredientName) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-md border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
+            <div
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-md border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-200"
+                onClick={(e) => e.stopPropagation()}
+            >
 
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white capitalize">
+                <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 shrink-0">
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white capitalize truncate pr-4">
                         {ingredientName}
                     </h3>
                     <button
                         onClick={onClose}
-                        className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+                        className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors shrink-0"
                     >
                         <X size={20} className="text-zinc-500 dark:text-zinc-400" />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-6 overflow-y-auto custom-scrollbar">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-8 space-y-3">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -138,7 +149,7 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-center">
+                <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-center shrink-0">
                     <p className="text-xs text-zinc-400">
                         AI-generated content. Verify with a professional.
                     </p>

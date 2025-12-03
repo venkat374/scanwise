@@ -3,7 +3,7 @@ uvicorn[standard]
 requests
 pydantic
 joblib
-scikit-learn>=1.7.0
+scikit-learn
 lightgbm
 pandas
 numpy

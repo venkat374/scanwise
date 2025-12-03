@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, Loader2, Image as ImageIcon } from 'lucide-react';
+import Button from './Button';
 
 import config from "../config";
 
@@ -115,7 +116,7 @@ const OCRUploader = ({ onTextExtracted }) => {
     };
 
     const UploadBox = ({ type, image, onSelect }) => (
-        <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-xl cursor-pointer bg-zinc-900/50 hover:bg-zinc-800/50 transition-all group relative overflow-hidden">
+        <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all group relative overflow-hidden">
             {image ? (
                 <div className="relative w-full h-full flex flex-col items-center justify-center">
                     <img src={image} alt={`${type} Preview`} className="h-full w-full object-contain p-2" />
@@ -125,8 +126,8 @@ const OCRUploader = ({ onTextExtracted }) => {
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 text-zinc-500 mb-2 group-hover:text-indigo-400 transition-colors" />
-                    <p className="text-xs text-zinc-400 font-medium">{type === 'front' ? 'Front (Name)' : 'Back (Ingredients)'}</p>
+                    <Upload className="w-8 h-8 text-slate-300 dark:text-slate-600 mb-2 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors" />
+                    <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">{type === 'front' ? 'Front (Name)' : 'Back (Ingredients)'}</p>
                 </div>
             )}
             <input type="file" className="hidden" accept="image/*" onChange={(e) => onSelect(e, type)} disabled={loading} />
@@ -140,23 +141,15 @@ const OCRUploader = ({ onTextExtracted }) => {
                 <UploadBox type="back" image={backImage} onSelect={handleFileSelect} />
             </div>
 
-            <button
+            <Button
                 onClick={handleAnalyze}
                 disabled={loading || (!frontFile && !backFile)}
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-zinc-700 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center justify-center"
+                loading={loading}
+                className="w-full"
             >
-                {loading ? (
-                    <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Analyzing... {progress}%
-                    </>
-                ) : (
-                    <>
-                        <ImageIcon className="w-5 h-5 mr-2" />
-                        Analyze Images
-                    </>
-                )}
-            </button>
+                {!loading && <ImageIcon className="w-5 h-5 mr-2" />}
+                {loading ? `Analyzing... ${progress}%` : 'Analyze Images'}
+            </Button>
         </div>
     );
 };

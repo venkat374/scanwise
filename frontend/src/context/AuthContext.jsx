@@ -49,13 +49,12 @@ export function AuthProvider({ children }) {
     const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        // Check local storage or system preference on mount
+        // Check local storage on mount, default to light
         const savedTheme = localStorage.getItem('scanwise_theme');
         if (savedTheme) {
             setTheme(savedTheme);
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
         }
+        // Removed system preference check to default to light mode
     }, []);
 
     useEffect(() => {

@@ -8,12 +8,14 @@ import {
     LogOut,
     Menu,
     X,
-    Sparkles
+    Sparkles,
+    Sun,
+    Moon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout({ children }) {
-    const { currentUser, logout } = useAuth();
+    const { currentUser, logout, theme, toggleTheme } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,8 +58,8 @@ export default function Layout({ children }) {
                             key={item.path}
                             to={item.path}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive(item.path)
-                                    ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium shadow-sm'
-                                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
+                                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium shadow-sm'
+                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
                                 }`}
                         >
                             <item.icon size={20} className={isActive(item.path) ? 'text-emerald-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'} />
@@ -66,7 +68,7 @@ export default function Layout({ children }) {
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
                     <div className="flex items-center gap-3 px-4 py-3 mb-2">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
                             {currentUser?.email?.[0].toUpperCase()}
@@ -76,6 +78,15 @@ export default function Layout({ children }) {
                             <p className="text-xs text-slate-500">Free Plan</p>
                         </div>
                     </div>
+
+                    <button
+                        onClick={toggleTheme}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                    >
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                        {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                    </button>
+
                     <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
@@ -109,8 +120,8 @@ export default function Layout({ children }) {
                                 to={item.path}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className={`flex items-center gap-3 px-4 py-4 rounded-xl text-lg ${isActive(item.path)
-                                        ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium'
-                                        : 'text-slate-500 dark:text-slate-400'
+                                    ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium'
+                                    : 'text-slate-500 dark:text-slate-400'
                                     }`}
                             >
                                 <item.icon size={24} />
@@ -135,10 +146,7 @@ export default function Layout({ children }) {
                 </div>
             </main>
 
-            {/* Mobile Bottom Nav (Optional - can use instead of top menu, but top menu is cleaner for "Dashboard" feel) 
-                Let's stick to the top header + menu for now as it's more standard for SaaS apps on mobile 
-                OR use a bottom bar for quick access. Let's add a simple bottom bar for core actions.
-            */}
+            {/* Mobile Bottom Nav */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-40 flex justify-around items-center h-16 px-2 pb-safe">
                 {navItems.map((item) => (
                     <Link

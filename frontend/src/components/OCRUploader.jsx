@@ -25,6 +25,45 @@ const OCRUploader = ({ onTextExtracted }) => {
         }
     };
 
+    const resizeImage = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1024;
+                    const MAX_HEIGHT = 1024;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                    }, 'image/jpeg', 0.8);
+                };
+            };
+        });
+    };
+
     const handleAnalyze = async () => {
         if (!frontFile && !backFile) {
             alert("Please upload at least one image.");
@@ -34,11 +73,19 @@ const OCRUploader = ({ onTextExtracted }) => {
         setLoading(true);
         setProgress(0);
 
-        const formData = new FormData();
-        if (frontFile) formData.append('files', frontFile);
-        if (backFile) formData.append('files', backFile);
-
         try {
+            const formData = new FormData();
+
+            // Resize images before uploading
+            if (frontFile) {
+                const resizedFront = await resizeImage(frontFile);
+                formData.append('files', resizedFront);
+            }
+            if (backFile) {
+                const resizedBack = await resizeImage(backFile);
+                formData.append('files', resizedBack);
+            }
+
             // Simulate progress
             const interval = setInterval(() => {
                 setProgress(prev => Math.min(prev + 10, 90));

@@ -20,6 +20,11 @@ export default function Layout({ children }) {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    // Safety net: Ensure body scroll is enabled on mount/navigation
+    React.useEffect(() => {
+        document.body.style.overflow = 'unset';
+    }, [location.pathname]);
+
     const handleLogout = async () => {
         try {
             await logout();

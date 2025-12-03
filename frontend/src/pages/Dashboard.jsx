@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Scan, Type, Search, Heart, Share2, Info } from 'lucide-react';
+import { Scan, Type, Search, Heart, Share2, Info, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -34,6 +34,7 @@ export default function Dashboard() {
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [alternatives, setAlternatives] = useState([]);
     const [showShareCard, setShowShareCard] = useState(false);
+    const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
     useEffect(() => {
         if (result && result.product_toxicity_score > 0.3 && result.category) {
@@ -237,12 +238,28 @@ export default function Dashboard() {
 
                             {mode === 'scan' && (
                                 <div className="space-y-6">
-                                    <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center">
-                                        <BarcodeScanner onResult={handleBarcodeScanned} />
-                                        <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-xs pointer-events-none">
-                                            Point camera at barcode
+                                    {!showBarcodeScanner ? (
+                                        <button
+                                            onClick={() => setShowBarcodeScanner(true)}
+                                            className="w-full py-3 border-2 border-dashed border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 hover:bg-zinc-800/50 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            <Scan className="w-5 h-5" />
+                                            Scan Barcode
+                                        </button>
+                                    ) : (
+                                        <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
+                                            <BarcodeScanner onResult={handleBarcodeScanned} />
+                                            <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-xs pointer-events-none">
+                                                Point camera at barcode
+                                            </div>
+                                            <button
+                                                onClick={() => setShowBarcodeScanner(false)}
+                                                className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/80 transition-colors z-10"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
                                         </div>
-                                    </div>
+                                    )}
 
                                     <div className="relative">
                                         <div className="absolute inset-0 flex items-center">
@@ -459,41 +476,43 @@ export default function Dashboard() {
                                 {/* Ingredient Breakdown */}
                                 <Card title="Ingredient Analysis">
                                     <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
-                                        <table className="w-full text-sm text-left">
-                                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium">
-                                                <tr>
-                                                    <th className="px-4 py-3">Ingredient</th>
-                                                    <th className="px-4 py-3 text-right">Risk Level</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                                {result.toxicity_report.map((item, idx) => (
-                                                    <tr
-                                                        key={idx}
-                                                        onClick={() => setSelectedIngredient({ name: item.ingredient, risk: item.label })}
-                                                        className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group"
-                                                    >
-                                                        <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                                                            <div className={`w-2 h-2 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-500' :
-                                                                item.label === 'LOW RISK' ? 'bg-blue-500' :
-                                                                    item.label === 'MODERATE RISK' ? 'bg-amber-500' : 'bg-red-500'
-                                                                }`} />
-                                                            {item.ingredient}
-                                                            <Info size={14} className="opacity-0 group-hover:opacity-100 text-slate-400 transition-opacity" />
-                                                        </td>
-                                                        <td className="px-4 py-3 text-right">
-                                                            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' :
-                                                                item.label === 'LOW RISK' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' :
-                                                                    item.label === 'MODERATE RISK' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' :
-                                                                        'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
-                                                                }`}>
-                                                                {item.label}
-                                                            </span>
-                                                        </td>
+                                        <div className="max-h-96 overflow-y-auto custom-scrollbar">
+                                            <table className="w-full text-sm text-left relative">
+                                                <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium sticky top-0 z-10 shadow-sm">
+                                                    <tr>
+                                                        <th className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50">Ingredient</th>
+                                                        <th className="px-4 py-3 text-right bg-slate-50 dark:bg-slate-800/50">Risk Level</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                    {result.toxicity_report.map((item, idx) => (
+                                                        <tr
+                                                            key={idx}
+                                                            onClick={() => setSelectedIngredient({ name: item.ingredient, risk: item.label })}
+                                                            className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group"
+                                                        >
+                                                            <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                                                                <div className={`w-2 h-2 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-500' :
+                                                                    item.label === 'LOW RISK' ? 'bg-blue-500' :
+                                                                        item.label === 'MODERATE RISK' ? 'bg-amber-500' : 'bg-red-500'
+                                                                    }`} />
+                                                                {item.ingredient}
+                                                                <Info size={14} className="opacity-0 group-hover:opacity-100 text-slate-400 transition-opacity" />
+                                                            </td>
+                                                            <td className="px-4 py-3 text-right">
+                                                                <span className={`text-xs font-semibold px-2 py-1 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' :
+                                                                    item.label === 'LOW RISK' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' :
+                                                                        item.label === 'MODERATE RISK' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' :
+                                                                            'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
+                                                                    }`}>
+                                                                    {item.label}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </Card>
                             </div>

@@ -8,14 +8,12 @@ import {
     LogOut,
     Menu,
     X,
-    Sparkles,
-    Sun,
-    Moon
+    Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout({ children }) {
-    const { currentUser, logout, theme, toggleTheme } = useAuth();
+    const { currentUser, logout } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -84,13 +82,6 @@ export default function Layout({ children }) {
                         </div>
                     </div>
 
-                    <button
-                        onClick={toggleTheme}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                    >
-                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                        {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-                    </button>
 
                     <button
                         onClick={handleLogout}

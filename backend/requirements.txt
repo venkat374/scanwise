@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+requests
+pydantic
+joblib
+scikit-learn
+lightgbm
+pandas
+numpy
+tqdm
+firebase-admin
+google-generativeai
+python-multipart
+python-dotenv
+gunicorn

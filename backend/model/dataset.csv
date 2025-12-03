@@ -1,0 +1,1001 @@
+ingredient,cancer,allergy,immunotoxic,reprotoxic,restriction,bad_oily,bad_dry,bad_sensitive,bad_combination,toxicity_label
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,1,0,0,1,0,0,0,1,1
+Retinol,0,0,0,0,0,0,0,0,1,0
+Niacinamide,0,1,0,0,1,0,0,0,1,1
+Cetearyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Alcohol Denat,1,0,0,0,1,0,0,1,0,1
+Paraben,0,0,0,1,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Alcohol Denat,0,0,0,0,0,0,0,1,0,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,1,1,1,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,1,1,0,0,0,0,1
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Dimethicone,0,1,0,0,1,1,0,0,0,1
+Titanium Dioxide,0,0,1,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,1,0,0,0,1,0,0,0,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,1,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,1,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,1,0,1,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,1,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,1,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,1,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,1,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Aqua,0,0,1,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,0,1,0,0,0,0,0,1,0
+Hydroquinone,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Paraffinum Liquidum,0,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,1,1,1,0,0,0,0,1
+Benzyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,1,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,1,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,1,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Titanium Dioxide,0,0,1,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Aqua,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,1,1,0,0,0,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,1,1,0,0,0,0,1
+Citric Acid,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,1,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Fragrance,0,1,1,1,1,0,0,1,0,1
+Aqua,0,0,0,0,1,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Kojic Acid,0,0,1,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,1,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,1,0,0,1,1,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Aqua,0,1,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,1,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,1,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,1,0,0,1,0,0,0,0,1
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Cetearyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Niacinamide,0,0,0,0,1,0,0,0,0,0
+Hydroquinone,1,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,1,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,1,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,1,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Glycerin,0,0,0,1,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,1,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Dimethicone,1,0,0,0,1,1,0,0,0,1
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,1,0,1,0,0,1,0,1
+Paraben,0,0,0,1,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Paraben,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,1,1
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,1,0,0,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,1,0,0,0,1,0,1,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,1,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Dimethicone,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Titanium Dioxide,1,0,0,0,1,0,0,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Paraben,0,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,1,0,0,1,0,1,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,1,0,0,0,0,0,1,0
+Alcohol Denat,0,0,1,0,0,0,0,1,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Dimethicone,0,0,1,0,0,0,0,0,0,0
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,1,0,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,1,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,1,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraben,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,1,0,0,1,0,0,0,0,1
+Paraben,1,0,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Sodium Laureth Sulfate,1,0,0,0,1,0,1,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Alcohol Denat,1,1,0,0,1,0,1,0,1,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,1,1,0,0,1,0,1
+Benzyl Alcohol,1,1,0,0,1,0,0,1,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,1,1,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,1,1,0,0,1,1,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,1,1,0,1,0,0,1
+Hydroquinone,1,1,0,0,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Fragrance,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Benzyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,1,1,0,0,1,0,0,0,0,1
+Alcohol Denat,1,0,0,0,1,0,0,1,0,1
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,1,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,1,1,0,0,0,1,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,1,0,0,1,1,0,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,1,0,0,1,0,0,0,0
+Titanium Dioxide,0,0,0,0,1,0,0,0,0,0
+Paraben,0,0,0,1,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Paraffinum Liquidum,1,0,1,0,1,0,0,0,0,1
+Titanium Dioxide,0,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Fragrance,1,1,0,0,1,0,0,1,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,1,1,0,1,1,0,1
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,1,0,1,0,0,1,0,1
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Benzyl Alcohol,1,0,0,0,1,0,0,1,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Paraben,0,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,1,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,1,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,1,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Fragrance,1,0,0,0,1,0,0,1,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Alcohol Denat,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,1,1,0,0,0,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,1,1,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,1,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Alcohol Denat,0,0,0,0,0,0,0,1,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,1,0,0,1,0,0,0,0,1
+Niacinamide,1,0,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,1,1,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,1,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,1,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,1,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Aqua,1,0,1,0,1,0,0,0,0,1
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Fragrance,0,1,0,0,1,0,0,1,1,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,1,0,0,1,1,0,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,1,0,0,0,1,0,0,0,0,1
+Paraffinum Liquidum,1,0,0,0,1,1,0,0,0,1
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Paraben,1,0,0,0,1,0,0,0,1,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,1,1,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Titanium Dioxide,0,1,0,0,1,0,0,0,0,1
+Paraffinum Liquidum,1,0,0,0,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,1,0,0,0,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,1,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Zinc Oxide,0,1,0,0,1,0,0,0,0,1
+Hydroquinone,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,1,0,0,1,0,0,0,0,1
+Paraben,1,0,0,0,1,0,0,0,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,1,1,1,0,0,0,0,1
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Aqua,0,1,0,0,1,0,0,0,0,1
+Paraben,1,0,0,0,1,0,0,0,0,1
+Niacinamide,0,0,0,0,1,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,1,1,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Benzyl Alcohol,1,1,0,0,1,0,0,0,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Paraffinum Liquidum,0,1,0,0,1,0,0,0,0,1
+Niacinamide,0,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,1,1,0,1,1,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,1,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Retinol,0,1,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Phenoxyethanol,1,1,0,0,1,0,0,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Benzyl Alcohol,0,0,0,0,1,0,0,1,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,1,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,0,1,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,1,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Paraben,0,0,0,1,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Niacinamide,0,0,0,1,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,1,0
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,1,1,0,0,1,0,0,1,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,1,1,1
+Fragrance,0,0,0,0,0,0,0,1,1,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,1,0,1,0,1,0,0,0,0,1
+Paraffinum Liquidum,0,1,0,0,1,0,0,0,0,1
+Aqua,1,0,0,0,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Paraben,1,0,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,0,1,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Propylene Glycol,0,1,0,0,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Propylene Glycol,0,1,0,0,1,0,0,0,0,1
+Dimethicone,0,0,0,0,1,1,0,0,0,0
+Fragrance,0,0,1,0,0,0,0,1,1,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,1,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,1,0,0,0,1,0,0,0,1,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,1,0,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Aqua,0,0,1,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,1,0
+Fragrance,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,1,0,1,0,1,1,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,1,0,0,0,1,0,0,0,0,1
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,1,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Salicylic Acid,1,0,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,1,0,0,1,0,0,0,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Glycerin,0,0,1,0,0,0,0,0,0,0
+Paraben,0,0,0,0,0,0,0,0,0,0
+Aqua,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,1,0
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Glycerin,1,0,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,1,0
+Sodium Laureth Sulfate,1,0,0,0,1,0,1,0,0,1
+Alcohol Denat,1,0,0,0,1,0,0,0,0,1
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,0,1,0,1
+Fragrance,0,0,1,0,0,0,0,1,0,0
+Niacinamide,0,0,1,0,0,0,0,0,1,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,1,0
+Citric Acid,0,1,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Retinol,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,1,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,1,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,1,1,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Kojic Acid,1,0,0,0,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Hydroquinone,1,1,0,1,1,0,0,0,1,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,1,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,1,0,0,0,0,0
+Niacinamide,0,0,0,1,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,1,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Dimethicone,0,0,0,0,1,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,1,0,0,0,1,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,1,0,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,1,1,0,0,0,0,1
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,1,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,1,1,1,0,0,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Paraben,0,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,1,0,0,0,1,0,1,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Citric Acid,0,0,1,0,0,0,0,0,0,0
+Zinc Oxide,0,1,0,0,1,0,0,0,0,1
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Zinc Oxide,0,1,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,1,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,1,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,1,0,1,0,1,0,0,0,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,1,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Fragrance,0,0,1,0,0,0,0,1,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Salicylic Acid,0,0,0,0,1,0,0,0,0,0
+Propylene Glycol,0,0,0,0,1,0,0,0,0,0
+Propylene Glycol,0,1,0,0,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Benzyl Alcohol,1,1,0,0,1,0,0,1,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,1,0,1,1,0,0,0,0,1
+Paraben,1,1,0,1,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,1,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,1,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Paraben,1,0,0,1,1,0,0,0,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,1,0,0,1,0,1,0,0,1
+Citric Acid,0,0,0,0,0,0,0,0,1,0
+Propylene Glycol,0,0,0,1,1,0,0,0,0,1
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Benzyl Alcohol,0,1,1,0,1,0,0,1,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,1,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,1,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,1,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,0,1,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,1,1,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Paraffinum Liquidum,0,1,0,0,1,1,0,0,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Aqua,0,1,0,0,1,0,0,0,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Niacinamide,1,0,0,1,1,0,0,0,0,1
+Aqua,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,1,1,0,0,0,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Glycerin,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,1,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,1,1,0,0,1,0,0,0,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1
+Kojic Acid,1,0,0,0,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,1,1,0,1,1,0,0,1,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,1,1,1,0,1,0,0,0,0,1
+Zinc Oxide,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,1,1,0,0,0,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,1,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,0,0,0,0,0,0,0,1,1,0
+Aqua,0,0,0,0,0,0,0,0,1,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,1,1,1,0,1,0,0,1,0,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,1,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,1,0,1,0,1,1,0,1
+Retinol,0,0,0,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Sodium Laureth Sulfate,1,0,0,0,1,0,1,0,1,1
+Paraben,1,0,0,1,1,0,0,0,0,1
+Glycerin,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,1,0,0,0,1,0,0,0,0,1
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Propylene Glycol,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,0,0,0,0,0,0,1,0,0
+Paraben,0,0,0,0,0,0,0,0,0,0
+Alcohol Denat,1,0,0,0,1,0,1,0,0,1
+Alcohol Denat,1,0,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,1,0
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Citric Acid,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,1,0,0,0,1,0,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Benzyl Alcohol,0,1,0,0,1,0,0,1,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Aqua,0,0,0,0,0,0,0,0,0,0
+Paraben,0,0,0,1,1,0,0,0,0,1
+Retinol,0,0,1,0,0,0,0,0,0,0
+Kojic Acid,0,0,0,0,0,0,0,0,0,0
+Paraben,1,0,0,0,1,0,0,0,0,1
+Paraffinum Liquidum,1,0,0,0,1,0,0,0,0,1
+Glycerin,1,0,0,0,1,0,0,0,1,1
+Glycerin,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,0,0,0,0,0,1,0,0,1,0
+Fragrance,0,0,0,0,0,0,0,1,0,0
+Hydroquinone,1,0,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Sodium Laureth Sulfate,0,0,0,0,0,0,1,0,0,0
+Niacinamide,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,1,0,1
+Cetearyl Alcohol,0,0,0,0,0,0,0,0,0,0
+Zinc Oxide,0,0,0,0,0,0,0,0,0,0
+Paraffinum Liquidum,1,0,0,0,1,1,0,0,0,1
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Paraben,0,0,1,0,0,0,0,0,0,0
+Retinol,0,0,0,0,0,0,0,0,0,0
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Titanium Dioxide,0,0,0,0,0,0,0,0,0,0
+Dimethicone,0,0,0,0,0,0,0,0,0,0
+Retinol,1,0,0,0,1,0,0,0,0,1
+Phenoxyethanol,0,1,0,0,1,0,0,0,0,1
+Salicylic Acid,0,0,0,0,0,0,0,0,0,0
+Fragrance,0,1,0,0,1,0,0,0,0,1
+Hydroquinone,1,0,0,1,1,0,0,0,0,1

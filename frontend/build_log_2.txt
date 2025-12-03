@@ -1,0 +1,27 @@
+[36mvite v7.2.2 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 25 modules transformed.
+[31m✗[39m Build failed in 1.35s
+[31merror during build:
+[31m[vite:esbuild] Transform failed with 1 error:
+C:/Users/venkt/Documents/projects/scanwise/ScanWise_Toxicity_analyzer/frontend/src/pages/Home.jsx:459:26: ERROR: Unterminated regular expression[31m
+file: [36mC:/Users/venkt/Documents/projects/scanwise/ScanWise_Toxicity_analyzer/frontend/src/pages/Home.jsx:459:26[31m
+[33m
+[33mUnterminated regular expression[33m
+457 |                                  </Card>
+458 |                              </div>
+459 |                      </div>
+    |                            ^
+460 |                  </div>
+461 |              </div>
+[31m
+    at failureErrorWithLog (C:\Users\venkt\Documents\projects\scanwise\ScanWise_Toxicity_analyzer\frontend\node_modules\esbuild\lib\main.js:1467:15)
+    at C:\Users\venkt\Documents\projects\scanwise\ScanWise_Toxicity_analyzer\frontend\node_modules\esbuild\lib\main.js:736:50
+    at responseCallbacks.<computed> (C:\Users\venkt\Documents\projects\scanwise\ScanWise_Toxicity_analyzer\frontend\node_modules\esbuild\lib\main.js:603:9)
+    at handleIncomingPacket (C:\Users\venkt\Documents\projects\scanwise\ScanWise_Toxicity_analyzer\frontend\node_modules\esbuild\lib\main.js:658:12)
+    at Socket.readFromStdout (C:\Users\venkt\Documents\projects\scanwise\ScanWise_Toxicity_analyzer\frontend\node_modules\esbuild\lib\main.js:581:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)[39m

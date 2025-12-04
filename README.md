@@ -19,7 +19,6 @@ ScanWise is a modern, full-stack web application designed to help users analyze 
 ### 🧠 AI-Powered Analysis
 *   **Deep Ingredient Insights**: Click on any ingredient to get an AI-generated explanation of its function, common uses, and potential side effects.
 *   **Risk Context**: The AI understands the context of the risk level (e.g., why "Fragrance" might be high risk for sensitive skin).
-*   **Smart Caching**: Explanations are cached locally to reduce API calls and ensure a snappy user experience.
 
 ### 🧴 Routine Builder & Conflict Checker
 *   **Build Your Routine**: Add multiple products to a virtual routine.
@@ -35,8 +34,8 @@ ScanWise is a modern, full-stack web application designed to help users analyze 
 ## 🚀 Core Functionality
 
 ### 1. Multi-Modal Product Scanning
-*   **Barcode Scanning**: Instantly look up products by scanning their barcode using your device's camera.
-*   **AI OCR (Image Analysis)**: Upload photos of the front (name) and back (ingredients) of a product. Google Gemini extracts the text with high accuracy.
+*   **Barcode Scanning**: Instantly look up products (if the product exists in our database) by scanning their barcode using your device's camera.
+*   **AI OCR (Image Analysis)**: Upload photos of the front (name) and back (ingredients) of a product. AI extracts the text with high accuracy.
 *   **Manual Entry**: Fallback option to manually type or paste ingredient lists.
 
 ### 2. Advanced Analysis Engine
@@ -65,7 +64,7 @@ ScanWise is a modern, full-stack web application designed to help users analyze 
 ### Backend
 *   **Framework**: FastAPI (Python)
 *   **Admin Portal**: Streamlit
-*   **AI Model**: Google Gemini 1.5 Flash
+*   **AI Model**: Google Gemini 2.0 Flash
 *   **Database**: Google Cloud Firestore
 *   **Auth**: Firebase Admin SDK
 *   **Deployment**: Render

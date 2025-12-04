@@ -140,4 +140,4 @@ VITE_FIREBASE_AUTH_DOMAIN=...
     ```
 
 ### Deployment
-See [deployment_guide.md](deployment_guide.md) for detailed instructions on deploying to Render and Vercel.
+For detailed step-by-step instructions on deploying to **Render** (Backend) and **Vercel** (Frontend), please refer to the [Deployment Guide](deployment.md).

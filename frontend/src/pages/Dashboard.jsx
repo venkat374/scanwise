@@ -247,12 +247,23 @@ export default function Dashboard() {
 
                                     {mode === 'scan' && (
                                         <div className="space-y-6">
+                                            <OCRUploader onTextExtracted={handleOCRResult} />
+
+                                            <div className="relative">
+                                                <div className="absolute inset-0 flex items-center">
+                                                    <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
+                                                </div>
+                                                <div className="relative flex justify-center text-xs uppercase">
+                                                    <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500">Or scan barcode</span>
+                                                </div>
+                                            </div>
+
                                             {!showBarcodeScanner ? (
                                                 <button
                                                     onClick={() => setShowBarcodeScanner(true)}
-                                                    className="w-full py-8 border-2 border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-400 hover:text-emerald-500 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all flex flex-col items-center justify-center gap-2"
+                                                    className="w-full py-4 border-2 border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-400 hover:text-emerald-500 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all flex items-center justify-center gap-2"
                                                 >
-                                                    <Scan className="w-8 h-8" />
+                                                    <Scan className="w-5 h-5" />
                                                     <span className="font-medium">Scan Barcode</span>
                                                 </button>
                                             ) : (
@@ -269,17 +280,6 @@ export default function Dashboard() {
                                                     </button>
                                                 </div>
                                             )}
-
-                                            <div className="relative">
-                                                <div className="absolute inset-0 flex items-center">
-                                                    <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
-                                                </div>
-                                                <div className="relative flex justify-center text-xs uppercase">
-                                                    <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500">Or upload ingredients</span>
-                                                </div>
-                                            </div>
-
-                                            <OCRUploader onTextExtracted={handleOCRResult} />
                                         </div>
                                     )}
 

@@ -43,10 +43,10 @@ export default function Layout({ children }) {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex font-sans selection:bg-emerald-500/30">
+        <div className="h-screen w-full bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex font-sans selection:bg-emerald-500/30 overflow-hidden">
 
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex flex-col w-72 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800 fixed h-full z-30 transition-all duration-300">
+            <aside className="hidden md:flex flex-col w-72 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800 h-full z-30 transition-all duration-300">
                 <div className="p-6 flex items-center gap-3">
                     <div className="bg-emerald-500 p-2 rounded-xl shadow-lg shadow-emerald-500/20">
                         <ScanLine className="text-white" size={24} />
@@ -56,7 +56,7 @@ export default function Layout({ children }) {
                     </span>
                 </div>
 
-                <nav className="flex-1 px-4 space-y-2 mt-6">
+                <nav className="flex-1 px-4 space-y-2 mt-6 overflow-y-auto custom-scrollbar">
                     {navItems.map((item) => (
                         <Link
                             key={item.path}
@@ -152,8 +152,8 @@ export default function Layout({ children }) {
             </AnimatePresence>
 
             {/* Main Content */}
-            <main className="flex-1 md:ml-72 pt-16 md:pt-0 min-h-screen transition-all duration-300 bg-zinc-50/50 dark:bg-black/20">
-                <div className="p-4 md:p-8 max-w-7xl mx-auto">
+            <main className="flex-1 pt-16 md:pt-0 h-full overflow-y-auto transition-all duration-300 bg-zinc-50/50 dark:bg-black/20 custom-scrollbar relative">
+                <div className="p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={location.pathname}

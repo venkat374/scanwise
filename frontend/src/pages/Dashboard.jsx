@@ -281,15 +281,15 @@ export default function Dashboard() {
                                         name="product_name"
                                         value={formData.product_name}
                                         onChange={handleChange}
-                                        placeholder="e.g. Plum Face Cream
+                                        placeholder="e.g. CeraVe Moisturizing Cream"
                                     />
                                     <Input
                                         label="Ingredients List"
-                                    type="textarea"
-                                    name="ingredients_list"
-                                    value={formData.ingredients_list}
-                                    onChange={handleChange}
-                                    placeholder="Paste ingredients here..."
+                                        type="textarea"
+                                        name="ingredients_list"
+                                        value={formData.ingredients_list}
+                                        onChange={handleChange}
+                                        placeholder="Paste ingredients here..."
                                     />
                                 </>
                             )}

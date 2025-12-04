@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Scan, Type, Search, Heart, Share2, Info, X, Sparkles, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Scan, Type, Search, Heart, Share2, Info, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -11,7 +11,6 @@ import OCRUploader from '../components/OCRUploader';
 import BarcodeScanner from '../components/BarcodeScanner';
 import IngredientModal from '../components/IngredientModal';
 import ShareCard from '../components/ShareCard';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import config from "../config";
 
@@ -185,18 +184,18 @@ export default function Dashboard() {
 
     const getScoreColor = (score) => {
         if (score >= 0.6) return 'text-red-500';
-        if (score >= 0.3) return 'text-amber-500';
-        return 'text-emerald-500';
+        if (score >= 0.3) return 'text-yellow-500';
+        return 'text-green-500';
     };
 
     return (
-        <div className="min-h-screen bg-transparent text-zinc-900 dark:text-zinc-100 font-sans">
+        <div className="min-h-screen bg-transparent text-slate-900 dark:text-slate-100 font-sans">
             <div className="max-w-6xl mx-auto">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                         Dashboard
                     </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400">Analyze products and check their safety.</p>
+                    <p className="text-slate-500 dark:text-slate-400">Analyze products and check their safety.</p>
                 </header>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -205,114 +204,104 @@ export default function Dashboard() {
                         <Card title="Product Details">
 
                             {/* Mode Toggle */}
-                            <div className="grid grid-cols-3 gap-1 bg-zinc-100 dark:bg-zinc-800/50 p-1 rounded-xl mb-6">
+                            <div className="grid grid-cols-3 gap-1 bg-muted p-1 rounded-lg mb-6">
                                 <button
                                     onClick={() => setMode('search')}
-                                    className={`flex items-center justify-center py-2 rounded-lg text-sm font-medium transition-all ${mode === 'search' ? 'bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'}`}
+                                    className={`flex items-center justify-center py-2 rounded-md text-sm font-medium transition-all ${mode === 'search' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     <Search className="w-4 h-4 mr-2" /> Search
                                 </button>
                                 <button
                                     onClick={() => setMode('scan')}
-                                    className={`flex items-center justify-center py-2 rounded-lg text-sm font-medium transition-all ${mode === 'scan' ? 'bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'}`}
+                                    className={`flex items-center justify-center py-2 rounded-md text-sm font-medium transition-all ${mode === 'scan' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     <Scan className="w-4 h-4 mr-2" /> Scan
                                 </button>
                                 <button
                                     onClick={() => setMode('manual')}
-                                    className={`flex items-center justify-center py-2 rounded-lg text-sm font-medium transition-all ${mode === 'manual' ? 'bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'}`}
+                                    className={`flex items-center justify-center py-2 rounded-md text-sm font-medium transition-all ${mode === 'manual' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     <Type className="w-4 h-4 mr-2" /> Manual
                                 </button>
                             </div>
 
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={mode}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.2 }}
-                                >
-                                    {mode === 'search' && (
-                                        <Autocomplete
-                                            label="Search Product"
-                                            value={formData.product_name}
-                                            onChange={handleChange}
-                                            onSelect={handleProductSelect}
-                                            placeholder="Type to search (e.g. Nivea)..."
-                                            name="product_name"
-                                        />
-                                    )}
+                            {mode === 'search' && (
+                                <Autocomplete
+                                    label="Search Product"
+                                    value={formData.product_name}
+                                    onChange={handleChange}
+                                    onSelect={handleProductSelect}
+                                    placeholder="Type to search (e.g. Nivea)..."
+                                    name="product_name"
+                                />
+                            )}
 
-                                    {mode === 'scan' && (
-                                        <div className="space-y-6">
-                                            <OCRUploader onTextExtracted={handleOCRResult} />
-
-                                            <div className="relative">
-                                                <div className="absolute inset-0 flex items-center">
-                                                    <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
-                                                </div>
-                                                <div className="relative flex justify-center text-xs uppercase">
-                                                    <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500">Or scan barcode</span>
-                                                </div>
+                            {mode === 'scan' && (
+                                <div className="space-y-6">
+                                    {!showBarcodeScanner ? (
+                                        <button
+                                            onClick={() => setShowBarcodeScanner(true)}
+                                            className="w-full py-3 border-2 border-dashed border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 hover:bg-zinc-800/50 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            <Scan className="w-5 h-5" />
+                                            Scan Barcode
+                                        </button>
+                                    ) : (
+                                        <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
+                                            <BarcodeScanner onResult={handleBarcodeScanned} />
+                                            <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-xs pointer-events-none">
+                                                Point camera at barcode
                                             </div>
-
-                                            {!showBarcodeScanner ? (
-                                                <button
-                                                    onClick={() => setShowBarcodeScanner(true)}
-                                                    className="w-full py-4 border-2 border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-400 hover:text-emerald-500 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all flex items-center justify-center gap-2"
-                                                >
-                                                    <Scan className="w-5 h-5" />
-                                                    <span className="font-medium">Scan Barcode</span>
-                                                </button>
-                                            ) : (
-                                                <div className="bg-black rounded-xl overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
-                                                    <BarcodeScanner onResult={handleBarcodeScanned} />
-                                                    <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-xs pointer-events-none">
-                                                        Point camera at barcode
-                                                    </div>
-                                                    <button
-                                                        onClick={() => setShowBarcodeScanner(false)}
-                                                        className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/80 transition-colors z-10"
-                                                    >
-                                                        <X className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <button
+                                                onClick={() => setShowBarcodeScanner(false)}
+                                                className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/80 transition-colors z-10"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     )}
 
-                                    {mode === 'manual' && (
-                                        <div className="space-y-4">
-                                            <Input
-                                                label="Product Name (Optional)"
-                                                name="product_name"
-                                                value={formData.product_name}
-                                                onChange={handleChange}
-                                                placeholder="e.g. My Custom Cream"
-                                            />
-                                            <Input
-                                                label="Ingredients List"
-                                                type="textarea"
-                                                name="ingredients_list"
-                                                value={formData.ingredients_list}
-                                                onChange={handleChange}
-                                                placeholder="Paste ingredients here..."
-                                            />
+                                    <div className="relative">
+                                        <div className="absolute inset-0 flex items-center">
+                                            <span className="w-full border-t border-muted" />
                                         </div>
-                                    )}
-                                </motion.div>
-                            </AnimatePresence>
+                                        <div className="relative flex justify-center text-xs uppercase">
+                                            <span className="bg-card px-2 text-muted-foreground">Or upload ingredients</span>
+                                        </div>
+                                    </div>
 
-                            <div className="space-y-4 mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800">
+                                    <OCRUploader onTextExtracted={handleOCRResult} />
+                                </div>
+                            )}
+
+                            {mode === 'manual' && (
+                                <>
+                                    <Input
+                                        label="Product Name (Optional)"
+                                        name="product_name"
+                                        value={formData.product_name}
+                                        onChange={handleChange}
+                                        placeholder="e.g. Plum Face Cream
+                                    />
+                                    <Input
+                                        label="Ingredients List"
+                                    type="textarea"
+                                    name="ingredients_list"
+                                    value={formData.ingredients_list}
+                                    onChange={handleChange}
+                                    placeholder="Paste ingredients here..."
+                                    />
+                                </>
+                            )}
+
+                            <div className="space-y-4 mt-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2 text-zinc-700 dark:text-zinc-300">Skin Type</label>
+                                    <label className="block text-sm font-medium mb-2">Skin Type</label>
                                     <select
                                         name="skin_type"
                                         value={formData.skin_type}
                                         onChange={handleChange}
-                                        className="input-field bg-zinc-50 dark:bg-zinc-800/50"
+                                        className="input-field"
                                     >
                                         <option>Normal</option>
                                         <option>Oily</option>
@@ -323,12 +312,12 @@ export default function Dashboard() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium mb-2 text-zinc-700 dark:text-zinc-300">Skin Tone</label>
+                                    <label className="block text-sm font-medium mb-2">Skin Tone</label>
                                     <select
                                         name="skin_tone"
                                         value={formData.skin_tone}
                                         onChange={handleChange}
-                                        className="input-field bg-zinc-50 dark:bg-zinc-800/50"
+                                        className="input-field"
                                     >
                                         <option>Fair</option>
                                         <option>Medium</option>
@@ -338,12 +327,12 @@ export default function Dashboard() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium mb-2 text-zinc-700 dark:text-zinc-300">Frequency</label>
+                                        <label className="block text-sm font-medium mb-2">Frequency</label>
                                         <select
                                             name="usage_frequency"
                                             value={formData.usage_frequency}
                                             onChange={handleChange}
-                                            className="input-field bg-zinc-50 dark:bg-zinc-800/50"
+                                            className="input-field"
                                         >
                                             <option>Daily</option>
                                             <option>Weekly</option>
@@ -351,12 +340,12 @@ export default function Dashboard() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium mb-2 text-zinc-700 dark:text-zinc-300">Amount</label>
+                                        <label className="block text-sm font-medium mb-2">Amount</label>
                                         <select
                                             name="amount_applied"
                                             value={formData.amount_applied}
                                             onChange={handleChange}
-                                            className="input-field bg-zinc-50 dark:bg-zinc-800/50"
+                                            className="input-field"
                                         >
                                             <option>Pea</option>
                                             <option>Normal</option>
@@ -366,15 +355,14 @@ export default function Dashboard() {
                                 </div>
                             </div>
 
-                            <div className="mt-8">
-                                <Button onClick={handleSubmit} disabled={loading} className="w-full" loading={loading}>
+                            <div className="mt-6">
+                                <Button onClick={handleSubmit} disabled={loading} className="w-full">
                                     {loading ? 'Analyzing...' : 'Analyze Product'}
                                 </Button>
                             </div>
 
                             {error && (
-                                <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
-                                    <AlertTriangle size={16} />
+                                <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
                                     {error}
                                 </div>
                             )}
@@ -384,17 +372,17 @@ export default function Dashboard() {
                     {/* Results Section */}
                     <div className="lg:col-span-2">
                         {!result ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/50">
-                                <div className="w-24 h-24 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
-                                    <Scan className="w-12 h-12 text-emerald-600 dark:text-emerald-400" />
+                            <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50">
+                                <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-6">
+                                    <Scan className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
                                 </div>
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
+                                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
                                     Ready to Analyze
                                 </h3>
-                                <p className="text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto mb-8">
+                                <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-8">
                                     Select a product from the search, scan a barcode, or upload an ingredient list to get a detailed toxicity report.
                                 </p>
-                                <div className="grid grid-cols-2 gap-4 text-sm text-zinc-400 dark:text-zinc-500">
+                                <div className="grid grid-cols-2 gap-4 text-sm text-slate-400 dark:text-slate-500">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-emerald-500" />
                                         <span>Toxicity Score</span>
@@ -414,16 +402,12 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         ) : (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="space-y-6"
-                            >
+                            <div className="space-y-6">
                                 {/* Score Card */}
                                 <Card>
                                     <div className="flex justify-between items-start mb-8">
                                         <div>
-                                            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">{result.product_name || "Analyzed Product"}</h2>
+                                            <h2 className="text-3xl font-bold tracking-tight">{result.product_name || "Analyzed Product"}</h2>
                                             <div className="flex gap-2 mt-3">
                                                 <Badge variant={result.product_status === 'SAFE' ? 'success' : result.product_status === 'MODERATE' ? 'warning' : 'danger'}>
                                                     {result.product_status}
@@ -434,47 +418,48 @@ export default function Dashboard() {
                                             <div className={`text-6xl font-black tracking-tighter ${getScoreColor(result.product_toxicity_score)}`}>
                                                 {Math.round(result.product_toxicity_score * 100)}
                                             </div>
-                                            <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Toxicity Score</span>
+                                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Toxicity Score</span>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-4 bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                                    <div className="grid grid-cols-3 gap-4 bg-muted/50 p-6 rounded-lg border border-border">
                                         <div>
-                                            <div className="text-sm font-medium text-zinc-500 mb-1">Base Score</div>
-                                            <div className="font-mono text-2xl font-semibold text-zinc-900 dark:text-zinc-100">{result.detailed_score_breakdown?.base_score || '-'}</div>
+                                            <div className="text-sm font-medium text-muted-foreground mb-1">Base Score</div>
+                                            <div className="font-mono text-2xl font-semibold">{result.detailed_score_breakdown?.base_score || '-'}</div>
                                         </div>
                                         <div>
-                                            <div className="text-sm font-medium text-zinc-500 mb-1">Usage Factor</div>
-                                            <div className="font-mono text-2xl font-semibold text-zinc-900 dark:text-zinc-100">x{result.detailed_score_breakdown?.usage_factor || '-'}</div>
+                                            <div className="text-sm font-medium text-muted-foreground mb-1">Usage Factor</div>
+                                            <div className="font-mono text-2xl font-semibold">x{result.detailed_score_breakdown?.usage_factor || '-'}</div>
                                         </div>
                                         <div>
-                                            <div className="text-sm font-medium text-zinc-500 mb-1">Ingredients</div>
-                                            <div className="font-mono text-2xl font-semibold text-zinc-900 dark:text-zinc-100">{result.ingredients.length}</div>
+                                            <div className="text-sm font-medium text-muted-foreground mb-1">Ingredients</div>
+                                            <div className="font-mono text-2xl font-semibold">{result.ingredients.length}</div>
                                         </div>
                                     </div>
 
                                     {currentUser && (
-                                        <div className="mt-6 flex items-center gap-3">
-                                            <Button onClick={handleAddToFavorites} variant="outline" className="flex-1">
+                                        <div className="mt-4 flex items-center gap-2">
+                                            <Button onClick={handleAddToFavorites} variant="outline" className="w-full">
                                                 <Heart className="w-4 h-4 mr-2" /> Add to Favorites
                                             </Button>
-                                            <Button onClick={() => setShowShareCard(true)} variant="outline" className="flex-1">
-                                                <Share2 className="w-4 h-4 mr-2" /> Share Result
-                                            </Button>
+                                            {favMessage && <span className="text-sm text-emerald-400">{favMessage}</span>}
                                         </div>
                                     )}
-                                    {favMessage && <div className="mt-2 text-center text-sm text-emerald-500 font-medium">{favMessage}</div>}
+
+                                    <div className="mt-4">
+                                        <Button onClick={() => setShowShareCard(true)} variant="outline" className="w-full">
+                                            <Share2 className="w-4 h-4 mr-2" /> Share Result
+                                        </Button>
+                                    </div>
                                 </Card>
 
                                 {/* Suitability Warnings */}
                                 {(result.not_suitable_for_skin_type.length > 0 || result.not_suitable_for_skin_tone.length > 0) && (
                                     <Card title="Suitability Warnings">
-                                        <div className="space-y-6">
+                                        <div className="space-y-4">
                                             {result.not_suitable_for_skin_type.length > 0 && (
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-zinc-500 uppercase mb-3 flex items-center gap-2">
-                                                        <AlertTriangle size={14} /> Skin Type Mismatch
-                                                    </h4>
+                                                    <h4 className="text-sm font-bold text-muted-foreground uppercase mb-2">Skin Type Mismatch</h4>
                                                     <div className="flex flex-wrap gap-2">
                                                         {result.not_suitable_for_skin_type.map((ing, i) => (
                                                             <Badge key={i} variant="warning">{ing}</Badge>
@@ -484,9 +469,7 @@ export default function Dashboard() {
                                             )}
                                             {result.not_suitable_for_skin_tone.length > 0 && (
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-zinc-500 uppercase mb-3 flex items-center gap-2">
-                                                        <AlertTriangle size={14} /> Skin Tone Mismatch
-                                                    </h4>
+                                                    <h4 className="text-sm font-bold text-muted-foreground uppercase mb-2">Skin Tone Mismatch</h4>
                                                     <div className="flex flex-wrap gap-2">
                                                         {result.not_suitable_for_skin_tone.map((ing, i) => (
                                                             <Badge key={i} variant="warning">{ing}</Badge>
@@ -503,10 +486,10 @@ export default function Dashboard() {
                                     <Card title="Better Alternatives">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {alternatives.map((alt, i) => (
-                                                <div key={i} className="flex items-center space-x-4 p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group">
+                                                <div key={i} className="flex items-center space-x-4 p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
                                                     <div className="flex-1">
-                                                        <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 transition-colors">{alt.product_name}</h4>
-                                                        <p className="text-sm text-zinc-500">{alt.brand}</p>
+                                                        <h4 className="font-semibold">{alt.product_name}</h4>
+                                                        <p className="text-sm text-muted-foreground">{alt.brand}</p>
                                                     </div>
                                                     <Badge variant="success">{Math.round(alt.toxicity_score * 100)}</Badge>
                                                 </div>
@@ -517,29 +500,29 @@ export default function Dashboard() {
 
                                 {/* Ingredient Breakdown */}
                                 <Card title="Ingredient Analysis">
-                                    <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                    <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
                                         <div className="max-h-96 overflow-y-auto custom-scrollbar">
                                             <table className="w-full text-sm text-left relative">
-                                                <thead className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 font-medium sticky top-0 z-10 shadow-sm">
+                                                <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium sticky top-0 z-10 shadow-sm">
                                                     <tr>
-                                                        <th className="px-4 py-3 bg-zinc-50 dark:bg-zinc-800/50">Ingredient</th>
-                                                        <th className="px-4 py-3 text-right bg-zinc-50 dark:bg-zinc-800/50">Risk Level</th>
+                                                        <th className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50">Ingredient</th>
+                                                        <th className="px-4 py-3 text-right bg-slate-50 dark:bg-slate-800/50">Risk Level</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                                     {result.toxicity_report.map((item, idx) => (
                                                         <tr
                                                             key={idx}
                                                             onClick={() => setSelectedIngredient({ name: item.ingredient, risk: item.label })}
-                                                            className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer group"
+                                                            className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer group"
                                                         >
-                                                            <td className="px-4 py-3 font-medium text-zinc-700 dark:text-zinc-200 flex items-center gap-2">
+                                                            <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2">
                                                                 <div className={`w-2 h-2 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-500' :
                                                                     item.label === 'LOW RISK' ? 'bg-blue-500' :
                                                                         item.label === 'MODERATE RISK' ? 'bg-amber-500' : 'bg-red-500'
                                                                     }`} />
                                                                 {item.ingredient}
-                                                                <Info size={14} className="opacity-0 group-hover:opacity-100 text-zinc-400 transition-opacity" />
+                                                                <Info size={14} className="opacity-0 group-hover:opacity-100 text-slate-400 transition-opacity" />
                                                             </td>
                                                             <td className="px-4 py-3 text-right">
                                                                 <span className={`text-xs font-semibold px-2 py-1 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' :
@@ -557,7 +540,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
                                 </Card>
-                            </motion.div>
+                            </div>
                         )}
                     </div>
                 </div>

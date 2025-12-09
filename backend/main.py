@@ -480,3 +480,9 @@ async def scan_barcode_image(file: UploadFile = File(...)):
     except Exception as e:
         print(f"Error processing barcode image: {e}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

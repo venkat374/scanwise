@@ -465,6 +465,10 @@ async def scan_barcode_image(file: UploadFile = File(...)):
             product_data = get_product_by_barcode(barcode)
             
         if product_data:
+            # Normalize data for frontend
+            if "ingredients" in product_data and isinstance(product_data["ingredients"], list):
+                product_data["ingredients_text"] = ", ".join(product_data["ingredients"])
+            
             return {
                 "barcode": barcode,
                 "found": True,

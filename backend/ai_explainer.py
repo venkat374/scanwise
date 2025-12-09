@@ -111,3 +111,37 @@ def analyze_routine_with_ai(products: list):
             "conflicts": [],
             "analysis": "Could not analyze routine."
         }
+def extract_barcode_with_ai(image_data):
+    """
+    Uses Gemini Vision to identify a barcode number from an image.
+    Returns the digits as a string, or None if not found.
+    """
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        image_part = {
+            "mime_type": "image/jpeg",
+            "data": image_data
+        }
+
+        prompt = """
+        Analyze this image and identify the barcode number (EAN-13, UPC, etc.).
+        Return ONLY the digits of the barcode. 
+        If there are multiple barcodes, return the most prominent one.
+        If no barcode is clearly visible or legible, return exactly "NOT_FOUND".
+        Do not include any other text, explanation, or markdown. Just the digits.
+        """
+
+        response = model.generate_content([prompt, image_part])
+        text = response.text.strip()
+        
+        if "NOT_FOUND" in text or not text:
+            return None
+            
+        # Clean up any non-digit characters just in case
+        digits = "".join(filter(str.isdigit, text))
+        return digits if digits else None
+
+    except Exception as e:
+        print(f"Error extracting barcode with AI: {e}")
+        return None

@@ -432,3 +432,51 @@ async def analyze_image(files: List[UploadFile] = File(...)):
     except Exception as e:
         print(f"AI Analysis failed: {e}")
         return {"error": f"Failed to analyze image: {str(e)}"}
+
+@app.post("/scan-barcode-image")
+async def scan_barcode_image(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        
+        # 1. Extract barcode using AI
+        from ai_explainer import extract_barcode_with_ai
+        barcode = extract_barcode_with_ai(contents)
+        
+        if not barcode:
+            return JSONResponse(content={"error": "Could not detect a barcode in the image. Please try again or enter manually."}, status_code=400)
+            
+        # 2. Look up product by barcode (reuse existing logic)
+        # First check local DB
+        db = get_db()
+        product_data = None
+        
+        if db:
+            products_ref = db.collection("products")
+            # Check for exact barcode match
+            query = products_ref.where("barcode", "==", barcode).limit(1).stream()
+            for doc in query:
+                product_data = doc.to_dict()
+                product_data['id'] = doc.id
+                break
+        
+        # If not in local DB, try external API
+        if not product_data:
+            from fetch_ingredients import get_product_by_barcode
+            product_data = get_product_by_barcode(barcode)
+            
+        if product_data:
+            return {
+                "barcode": barcode,
+                "found": True,
+                "product": product_data
+            }
+        else:
+            return {
+                "barcode": barcode,
+                "found": False,
+                "message": f"Product not found for barcode {barcode}"
+            }
+
+    except Exception as e:
+        print(f"Error processing barcode image: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)

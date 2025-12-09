@@ -97,27 +97,43 @@ export default function Dashboard() {
         setMode('manual'); // Switch to manual to show the filled data
     };
 
-    const handleBarcodeScanned = async (barcode) => {
+    const handleBarcodeScanned = async (imageBlob) => {
         setLoading(true);
+        setShowBarcodeScanner(false); // Close scanner immediately
+
+        const formData = new FormData();
+        formData.append('file', imageBlob, 'barcode.jpg');
+
         try {
-            const res = await axios.get(`${config.API_BASE_URL}/scan-barcode?barcode=${barcode}`);
+            const res = await axios.post(`${config.API_BASE_URL}/scan-barcode-image`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
             if (res.data.error) {
-                setError(`Product not found (Barcode: ${barcode}). You can add it via the Admin Portal.`);
-            } else {
-                const product = res.data;
+                setError(res.data.error);
+            } else if (res.data.found) {
+                const product = res.data.product;
                 setFormData({
                     ...formData,
                     product_name: product.product_name,
                     ingredients_list: product.ingredients_text,
-                    barcode: barcode // Set barcode from scan
+                    barcode: res.data.barcode
                 });
                 setMode('manual'); // Switch to manual to review
+            } else {
+                // Barcode found but product not in DB
+                setError(`Product not found (Barcode: ${res.data.barcode}). You can add it via the Admin Portal.`);
             }
         } catch (err) {
-            setError("Failed to lookup barcode.");
+            console.error("Barcode scan error:", err);
+            setError("Failed to analyze barcode image. Please try again or enter manually.");
         }
         setLoading(false);
     };
+
+    // ...
+
+
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -244,19 +260,13 @@ export default function Dashboard() {
                                             className="w-full py-3 border-2 border-dashed border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 hover:bg-zinc-800/50 transition-all flex items-center justify-center gap-2"
                                         >
                                             <Scan className="w-5 h-5" />
-                                            Scan Barcode
+                                            Scan Barcode (AI Powered)
                                         </button>
                                     ) : (
-                                        <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
-                                            <BarcodeScanner onResult={handleBarcodeScanned} />
-                                            {/* Overlay text is handled inside BarcodeScanner now */}
-                                            <button
-                                                onClick={() => setShowBarcodeScanner(false)}
-                                                className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/80 transition-colors z-10"
-                                            >
-                                                <X className="w-4 h-4" />
-                                            </button>
-                                        </div>
+                                        <BarcodeScanner
+                                            onCapture={handleBarcodeScanned}
+                                            onClose={() => setShowBarcodeScanner(false)}
+                                        />
                                     )}
 
                                     <div className="relative">

@@ -15,7 +15,7 @@ def explain_ingredient_with_ai(ingredient_name: str, risk_context: str = None):
     
     genai.configure(api_key=GOOGLE_API_KEY)
 
-    model = genai.GenerativeModel('gemini-flash-latest')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
     context_str = ""
     if risk_context:
@@ -68,7 +68,7 @@ def analyze_routine_with_ai(products: list):
     for p in products:
         product_list_str += f"- {p.get('name', 'Unknown')}: {', '.join(p.get('ingredients', []))}\n"
 
-    model = genai.GenerativeModel('gemini-flash-latest')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
     Analyze this skincare routine for ingredient conflicts (e.g. Retinol + Vitamin C, AHAs + Retinol, etc.).
     
@@ -117,7 +117,7 @@ def extract_barcode_with_ai(image_data):
     Returns the digits as a string, or None if not found.
     """
     try:
-        model = genai.GenerativeModel('gemini-flash-latest')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         image_part = {
             "mime_type": "image/jpeg",

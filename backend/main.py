@@ -43,12 +43,11 @@ from fetch_ingredients import get_ingredients_from_product, search_products
 # ... imports ...
 
 class ProductRequest(BaseModel):
-    product_name: str
-    skin_type: str
-    skin_tone: str
-    usage_frequency: str = "daily"
-    amount_applied: str = "normal"
-    amount_applied: str = "normal"
+    product_name: str = ""
+    skin_type: str = "Normal"
+    skin_tone: str = "Medium"
+    usage_frequency: str = "Daily"
+    amount_applied: str = "Normal"
     ingredients_list: Optional[str] = None # For manual entry
     barcode: Optional[str] = None # For direct lookup
     category: Optional[str] = None # Product category (e.g. Moisturizer)

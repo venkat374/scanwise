@@ -249,7 +249,6 @@ export default function Dashboard() {
                                     ) : (
                                         <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
                                             <BarcodeScanner onResult={handleBarcodeScanned} />
-                                            <BarcodeScanner onResult={handleBarcodeScanned} />
                                             {/* Overlay text is handled inside BarcodeScanner now */}
                                             <button
                                                 onClick={() => setShowBarcodeScanner(false)}

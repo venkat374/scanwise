@@ -116,7 +116,7 @@ export default function Dashboard() {
                 setFormData({
                     ...formData,
                     product_name: product.product_name,
-                    ingredients_list: product.ingredients_text,
+                    ingredients_list: product.ingredients_text || (Array.isArray(product.ingredients) ? product.ingredients.join(', ') : ''),
                     barcode: res.data.barcode
                 });
                 setMode('manual'); // Switch to manual to review
@@ -144,7 +144,7 @@ export default function Dashboard() {
         const payload = {
             ...formData,
             ingredients_list: (mode === 'manual' || mode === 'scan') ? formData.ingredients_list : null,
-            barcode: (mode === 'search' || mode === 'scan') ? formData.barcode : null
+            barcode: formData.barcode || null // Always send barcode if available
         };
 
         try {

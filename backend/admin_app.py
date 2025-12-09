@@ -85,7 +85,7 @@ st.markdown("Manage crowdsourced product data and view statistics.")
 
 # Sidebar
 st.sidebar.header("Navigation")
-page = st.sidebar.radio("Go to", ["Dashboard", "Product Manager", "User Stats"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Product Manager", "Add Product", "User Stats"])
 
 if page == "Dashboard":
     st.header("Overview")
@@ -132,18 +132,23 @@ if page == "Dashboard":
 elif page == "Product Manager":
     st.header("Product Database")
     
-    # Search
-    search_query = st.text_input("Search Products (by name)", "")
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        search_query = st.text_input("Search Products (by name)", "")
+    with col2:
+        filter_status = st.radio("Status", ["All", "Active", "Flagged"], index=0, horizontal=True)
     
     products_ref = db.collection("products")
     query = products_ref
     
+    # Strategy: 
+    # If search query exists, query by name (inequality) and filter status in memory (to avoid complex index).
+    # If no search query, query by status (equality) if not "All".
+    
     if search_query:
-        # Simple prefix search (Firestore limitation: case sensitive usually)
-        # For better search, we'd need Algolia or similar. 
-        # Here we just fetch matches.
-        # Using >= and <= for prefix search
         query = query.where("product_name", ">=", search_query).where("product_name", "<=", search_query + '\uf8ff')
+    elif filter_status != "All":
+        query = query.where("db_status", "==", filter_status.lower())
     
     # Limit to 50 for performance
     docs = query.limit(50).stream()
@@ -152,6 +157,10 @@ elif page == "Product Manager":
     for doc in docs:
         d = doc.to_dict()
         d["id"] = doc.id
+        # Client-side filtering if search query was used
+        if search_query and filter_status != "All":
+            if d.get("db_status", "active") != filter_status.lower():
+                continue
         data.append(d)
         
     if not data:
@@ -160,7 +169,7 @@ elif page == "Product Manager":
         df = pd.DataFrame(data)
         
         # Reorder columns
-        cols = ["id", "product_name", "brand", "category", "toxicity_score", "product_status"]
+        cols = ["id", "product_name", "brand", "category", "toxicity_score", "db_status", "product_status"]
         # Filter to only existing cols
         cols = [c for c in cols if c in df.columns]
         
@@ -172,15 +181,11 @@ elif page == "Product Manager":
             disabled=["id"] # ID should not be editable
         )
         
-        # Check for changes (this is a simplified approach)
-        # In a real app, you'd track specific changes. 
-        # Streamlit's data_editor returns the current state.
-        
         # Edit Form for selected product
         st.divider()
-        st.subheader("Edit / Delete Product")
+        st.subheader("Edit / Review Product")
         
-        selected_id = st.selectbox("Select Product ID to Edit/Delete", df["id"].tolist())
+        selected_id = st.selectbox("Select Product ID to Edit/Review", df["id"].tolist())
         
         if selected_id:
             # Fetch fresh data
@@ -190,6 +195,13 @@ elif page == "Product Manager":
             if p_snap.exists:
                 p_data = p_snap.to_dict()
                 
+                # Show Status Badge
+                curr_status = p_data.get("db_status", "active")
+                if curr_status == "flagged":
+                    st.warning("⚠️ This product is FLAGGED as suspicious.")
+                else:
+                    st.success("✅ This product is ACTIVE.")
+
                 with st.form("edit_product_form"):
                     new_name = st.text_input("Product Name", p_data.get("product_name", ""))
                     new_brand = st.text_input("Brand", p_data.get("brand", ""))
@@ -200,8 +212,17 @@ elif page == "Product Manager":
                     ingredients_str = ", ".join(p_data.get("ingredients", []))
                     new_ingredients = st.text_area("Ingredients (comma separated)", ingredients_str)
                     
-                    submitted = st.form_submit_button("Update Product")
+                    col_update, col_approve = st.columns(2)
                     
+                    with col_update:
+                        submitted = st.form_submit_button("Update Product Data")
+                    
+                    with col_approve:
+                        if curr_status == "flagged":
+                            approve_btn = st.form_submit_button("✅ Approve (Set Active)")
+                        else:
+                            approve_btn = False
+
                     if submitted:
                         updated_data = {
                             "product_name": new_name,
@@ -213,12 +234,68 @@ elif page == "Product Manager":
                         p_ref.update(updated_data)
                         st.success(f"Updated {new_name}!")
                         st.rerun()
+                    
+                    if approve_btn:
+                        p_ref.update({"db_status": "active"})
+                        st.success(f"Approved {new_name}!")
+                        st.rerun()
                 
-                if st.button("Delete Product", type="primary"):
+                st.write("")
+                if st.button("Delete / Reject Product", type="primary"):
                     p_ref.delete()
                     st.warning(f"Deleted product {selected_id}")
                     st.rerun()
 
+elif page == "Add Product":
+    st.header("Add New Product")
+    st.markdown("Manually add authentic products to the database. These will take precedence over external API results.")
+    
+    with st.form("add_product_form"):
+        col1, col2 = st.columns(2)
+        with col1:
+            barcode = st.text_input("Barcode (Required)", help="Scan the barcode or type it in.")
+            product_name = st.text_input("Product Name")
+            brand = st.text_input("Brand")
+        
+        with col2:
+            category = st.text_input("Category (e.g. Moisturizer)")
+            image_url = st.text_input("Image URL (Optional)")
+            toxicity_score = st.number_input("Toxicity Score (Optional Override)", 0.0, 10.0, 0.0, help="Leave 0 to auto-calculate later if needed, or set manually.")
+            
+        ingredients = st.text_area("Ingredients (comma separated)", height=150, help="Copy paste the full ingredient list here.")
+        
+        submitted = st.form_submit_button("Add Product to Database")
+        
+        if submitted:
+            if not barcode or not product_name or not ingredients:
+                st.error("Barcode, Product Name, and Ingredients are required.")
+            else:
+                # Check if exists
+                doc_ref = db.collection("products").document(barcode)
+                doc = doc_ref.get()
+                
+                if doc.exists:
+                    st.warning(f"Product with barcode {barcode} already exists: {doc.to_dict().get('product_name')}. Use Product Manager to edit.")
+                else:
+                    # Clean ingredients
+                    ing_list = [i.strip() for i in ingredients.split(",") if i.strip()]
+                    
+                    new_product = {
+                        "product_name": product_name,
+                        "brand": brand,
+                        "category": category,
+                        "ingredients": ing_list,
+                        "image_url": image_url,
+                        "toxicity_score": toxicity_score,
+                        "product_status": "analyzed" if toxicity_score > 0 else "pending",
+                        "db_status": "active", # Admin added is always active
+                        "source": "admin_manual",
+                        "timestamp": datetime.now()
+                    }
+                    
+                    doc_ref.set(new_product)
+                    st.success(f"Successfully added {product_name} ({barcode})!")
+                    
 elif page == "User Stats":
     st.header("User Statistics")
     st.info("Coming soon...")

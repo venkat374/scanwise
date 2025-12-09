@@ -102,7 +102,7 @@ export default function Dashboard() {
         try {
             const res = await axios.get(`${config.API_BASE_URL}/scan-barcode?barcode=${barcode}`);
             if (res.data.error) {
-                setError("Product not found via barcode. Try searching by name.");
+                setError(`Product not found (Barcode: ${barcode}). You can add it via the Admin Portal.`);
             } else {
                 const product = res.data;
                 setFormData({

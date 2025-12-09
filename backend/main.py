@@ -116,10 +116,15 @@ def scan_product(req: ProductRequest):
     bad_skin_type = check_skin_type_suitability(ingredients, req.skin_type)
     bad_skin_tone = check_skin_tone_suitability(ingredients, req.skin_tone)
 
-    # --- CROWDSOURCING: SAVE TO GLOBAL DB ---
     try:
         db = get_db()
         if db:
+            # --- SUSPICIOUS PRODUCT DETECTION ---
+            from suspicious_detection import detect_suspicious_product
+
+            is_suspicious = detect_suspicious_product(req.product_name, req.category)
+            db_status = "flagged" if is_suspicious else "active"
+
             product_data = {
                 "product_name": req.product_name,
                 "ingredients": ingredients,
@@ -127,7 +132,8 @@ def scan_product(req: ProductRequest):
                 "product_status": product_status,
                 "category": req.category,
                 "timestamp": datetime.now(),
-                "source": "user_scan"
+                "source": "user_scan",
+                "db_status": db_status
             }
             
             # If we have a barcode, use it as the document ID for easy lookup
@@ -246,6 +252,34 @@ def get_history(uid: str = Depends(get_current_user_uid)):
     except Exception as e:
         print(f"Error fetching history: {e}")
         # If it's an index error, it will be printed to the console
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/history")
+def clear_history(uid: str = Depends(get_current_user_uid)):
+    db = get_db()
+    if not db:
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    
+    try:
+        # Batch delete
+        batch = db.batch()
+        docs = db.collection("scan_history").where("user_id", "==", uid).stream()
+        count = 0
+        for doc in docs:
+            batch.delete(doc.reference)
+            count += 1
+            # Commit every 400 items (limit is 500)
+            if count >= 400:
+                batch.commit()
+                batch = db.batch()
+                count = 0
+        
+        if count > 0:
+            batch.commit()
+            
+        return {"status": "success", "message": "History cleared"}
+    except Exception as e:
+        print(f"Error clearing history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/favorites")

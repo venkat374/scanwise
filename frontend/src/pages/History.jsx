@@ -6,6 +6,8 @@ import Badge from '../components/Badge';
 import config from "../config";
 import { motion } from 'framer-motion';
 
+import { Trash2 } from 'lucide-react';
+
 export default function History() {
     const { currentUser } = useAuth();
     const [history, setHistory] = useState([]);
@@ -28,14 +30,41 @@ export default function History() {
         fetchHistory();
     }, [currentUser]);
 
+    const handleClearHistory = async () => {
+        if (!currentUser) return;
+        if (!window.confirm("Are you sure you want to clear your entire scan history? This cannot be undone.")) return;
+
+        try {
+            const token = await currentUser.getIdToken();
+            await axios.delete(`${config.API_BASE_URL}/history`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setHistory([]);
+        } catch (err) {
+            console.error("Failed to clear history", err);
+            alert("Failed to clear history. Please try again.");
+        }
+    };
+
     if (loading) return <div className="p-8 text-center text-zinc-500">Loading history...</div>;
 
     return (
         <div className="font-sans">
             <div className="max-w-4xl mx-auto">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Scan History</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400">View your past product scans.</p>
+                <div className="mb-8 flex justify-between items-end">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Scan History</h1>
+                        <p className="text-zinc-500 dark:text-zinc-400">View your past product scans.</p>
+                    </div>
+                    {history.length > 0 && (
+                        <button
+                            onClick={handleClearHistory}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 rounded-lg transition-colors"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            Clear History
+                        </button>
+                    )}
                 </div>
 
                 {history.length === 0 ? (

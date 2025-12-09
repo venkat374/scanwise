@@ -84,7 +84,7 @@ def analyze_routine_with_ai(products: list):
                 "reason": "Why they conflict (e.g. Both contain strong actives...)"
             }}
         ],
-        "analysis": "A brief summary of the routine's safety and effectiveness."
+        "analysis": "A brief summary of the routine's safety and effectiveness. Write in plain text. DO NOT use markdown formatting like bold (**text**) or italics. Keep it concise and clear."
     }}
     If no conflicts, return empty list for "conflicts".
     Return ONLY the JSON.

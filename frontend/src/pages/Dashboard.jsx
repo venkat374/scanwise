@@ -115,7 +115,7 @@ export default function Dashboard() {
                 const product = res.data.product;
                 setFormData({
                     ...formData,
-                    product_name: product.product_name,
+                    product_name: product.product_name || "Unknown Product",
                     ingredients_list: product.ingredients_text || (Array.isArray(product.ingredients) ? product.ingredients.join(', ') : ''),
                     barcode: res.data.barcode
                 });

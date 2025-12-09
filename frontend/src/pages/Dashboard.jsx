@@ -249,9 +249,8 @@ export default function Dashboard() {
                                     ) : (
                                         <div className="bg-black rounded-lg overflow-hidden relative min-h-[200px] flex flex-col items-center justify-center animate-in fade-in slide-in-from-top-4 duration-300">
                                             <BarcodeScanner onResult={handleBarcodeScanned} />
-                                            <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-xs pointer-events-none">
-                                                Point camera at barcode
-                                            </div>
+                                            <BarcodeScanner onResult={handleBarcodeScanned} />
+                                            {/* Overlay text is handled inside BarcodeScanner now */}
                                             <button
                                                 onClick={() => setShowBarcodeScanner(false)}
                                                 className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/80 transition-colors z-10"

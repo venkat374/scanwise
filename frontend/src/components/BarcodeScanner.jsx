@@ -7,6 +7,14 @@ export default function BarcodeScanner({ onResult, onError }) {
     const [flash, setFlash] = useState(false);
 
     const { ref } = useZxing({
+        constraints: {
+            video: {
+                facingMode: "environment",
+                width: { min: 640, ideal: 1280 },
+                height: { min: 480, ideal: 720 },
+                focusMode: "continuous"
+            }
+        },
         onDecodeResult(result) {
             const text = result.getText();
             // Debounce same code to avoid rapid firing

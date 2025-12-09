@@ -260,7 +260,7 @@ export default function Dashboard() {
                                             className="w-full py-3 border-2 border-dashed border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 hover:bg-zinc-800/50 transition-all flex items-center justify-center gap-2"
                                         >
                                             <Scan className="w-5 h-5" />
-                                            Scan Barcode (AI Powered)
+                                            Scan Barcode
                                         </button>
                                     ) : (
                                         <BarcodeScanner

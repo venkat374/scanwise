@@ -396,7 +396,7 @@ async def analyze_image(files: List[UploadFile] = File(...)):
             image = Image.open(io.BytesIO(contents))
             image_parts.append(image)
         
-        model = genai.GenerativeModel('gemini-flash-latest')
+        model = genai.GenerativeModel('gemini-flash-latest)
         prompt = """
         Analyze these product images (Front and/or Back).
         1. Identify the Product Name and Brand from the Front image (usually the one with the logo).

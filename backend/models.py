@@ -7,6 +7,9 @@ class UserProfile(BaseModel):
     email: str
     skin_type: Optional[str] = None
     skin_tone: Optional[str] = None
+    age_group: Optional[str] = None
+    skin_concerns: Optional[List[str]] = []
+    allergies: Optional[List[str]] = []
     theme_preference: Optional[str] = "light"
     created_at: datetime = datetime.now()
 

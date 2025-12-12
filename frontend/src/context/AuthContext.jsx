@@ -18,7 +18,9 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
+    const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [profileLoading, setProfileLoading] = useState(true); // New state for profile fetch
 
     function signup(email, password) {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -68,27 +70,34 @@ export function AuthProvider({ children }) {
     }, [theme]);
 
 
-    useEffect(() => {
-        // Fetch user preference on login
-        async function fetchUserTheme() {
-            if (currentUser) {
-                try {
-                    const token = await currentUser.getIdToken();
-                    const res = await fetch(`${config.API_BASE_URL}/users/profile`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data.theme_preference) {
-                            setTheme(data.theme_preference);
-                        }
+    const fetchUserProfile = async () => {
+        if (currentUser) {
+            setProfileLoading(true); // Start loading
+            try {
+                const token = await currentUser.getIdToken();
+                const res = await fetch(`${config.API_BASE_URL}/users/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setUserProfile(data);
+                    if (data.theme_preference) {
+                        setTheme(data.theme_preference);
                     }
-                } catch (err) {
-                    console.error("Failed to fetch theme", err);
                 }
+            } catch (err) {
+                console.error("Failed to fetch profile", err);
+            } finally {
+                setProfileLoading(false); // End loading
             }
+        } else {
+            setUserProfile(null);
+            setProfileLoading(false);
         }
-        fetchUserTheme();
+    };
+
+    useEffect(() => {
+        fetchUserProfile();
     }, [currentUser]);
 
     const toggleTheme = () => {
@@ -102,7 +111,10 @@ export function AuthProvider({ children }) {
         loginWithGoogle,
         logout,
         theme,
-        toggleTheme
+        toggleTheme,
+        userProfile,
+        profileLoading, // Expose profileLoading
+        refreshProfile: fetchUserProfile
     };
 
     return (

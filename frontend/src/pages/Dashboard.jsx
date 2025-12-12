@@ -11,11 +11,14 @@ import OCRUploader from '../components/OCRUploader';
 import BarcodeScanner from '../components/BarcodeScanner';
 import IngredientModal from '../components/IngredientModal';
 import ShareCard from '../components/ShareCard';
+import OnboardingModal from '../components/OnboardingModal';
+import ScoreCard from '../components/ScoreCard';
+import KeyTakeaways from '../components/KeyTakeaways';
 
 import config from "../config";
 
 export default function Dashboard() {
-    const { currentUser } = useAuth();
+    const { currentUser, userProfile, profileLoading } = useAuth();
     const [formData, setFormData] = useState({
         product_name: '',
         skin_type: 'Normal',
@@ -24,7 +27,10 @@ export default function Dashboard() {
         amount_applied: 'Normal',
         ingredients_list: '',
         barcode: '', // Store selected product ID
-        category: ''
+        category: '',
+        age_group: '',
+        skin_concerns: [],
+        allergies: []
     });
     const [mode, setMode] = useState('search'); // 'search', 'manual', 'ocr', 'barcode'
     const [result, setResult] = useState(null);
@@ -49,28 +55,19 @@ export default function Dashboard() {
         }
     }, [result]);
 
-    // Auto-fill profile data
+    // Auto-fill profile data from context
     useEffect(() => {
-        async function fetchProfile() {
-            if (!currentUser) return;
-            try {
-                const token = await currentUser.getIdToken();
-                const res = await axios.get(`${config.API_BASE_URL}/users/profile`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                if (res.data) {
-                    setFormData(prev => ({
-                        ...prev,
-                        skin_type: res.data.skin_type || prev.skin_type,
-                        skin_tone: res.data.skin_tone || prev.skin_tone
-                    }));
-                }
-            } catch (err) {
-                console.error("Failed to fetch profile for auto-fill", err);
-            }
+        if (userProfile) {
+            setFormData(prev => ({
+                ...prev,
+                skin_type: userProfile.skin_type || prev.skin_type,
+                skin_tone: userProfile.skin_tone || prev.skin_tone,
+                age_group: userProfile.age_group || prev.age_group,
+                skin_concerns: userProfile.skin_concerns || prev.skin_concerns,
+                allergies: userProfile.allergies || prev.allergies
+            }));
         }
-        fetchProfile();
-    }, [currentUser]);
+    }, [userProfile]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -393,44 +390,72 @@ export default function Dashboard() {
                                 <div className="grid grid-cols-2 gap-4 text-sm text-slate-400 dark:text-slate-500">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                        <span>Toxicity Score</span>
+                                        <span>Safety Rating</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                        <span>Ingredient Risk</span>
+                                        <span>Wellness Match</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                        <span>Skin Compatibility</span>
+                                        <span>Key Takeaways</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-purple-500" />
-                                        <span>Better Alternatives</span>
+                                        <span>Detailed Analysis</span>
                                     </div>
                                 </div>
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {/* Score Card */}
-                                <Card>
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div>
-                                            <h2 className="text-3xl font-bold tracking-tight">{result.product_name || "Analyzed Product"}</h2>
-                                            <div className="flex gap-2 mt-3">
-                                                <Badge variant={result.product_status === 'SAFE' ? 'success' : result.product_status === 'MODERATE' ? 'warning' : 'danger'}>
-                                                    {result.product_status}
-                                                </Badge>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className={`text-6xl font-black tracking-tighter ${getScoreColor(result.product_toxicity_score)}`}>
-                                                {Math.round(result.product_toxicity_score * 100)}
-                                            </div>
-                                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Toxicity Score</span>
-                                        </div>
+                                {/* Product Header */}
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-3xl font-bold tracking-tight">{result.product_name || "Analyzed Product"}</h2>
+                                        <p className="text-muted-foreground">{result.category || "General Skincare"}</p>
                                     </div>
+                                    {currentUser && (
+                                        <Button onClick={handleAddToFavorites} variant="outline" size="sm">
+                                            <Heart className="w-4 h-4 mr-2" /> {favMessage || "Save"}
+                                        </Button>
+                                    )}
+                                </div>
 
-                                    <div className="grid grid-cols-3 gap-4 bg-muted/50 p-6 rounded-lg border border-border">
+                                {/* New Results Layout */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Safety Score Card */}
+                                    <ScoreCard
+                                        title="Safety Rating"
+                                        score={Math.round((1 - result.product_toxicity_score) * 100)} // Invert for "Safety"
+                                        maxScore={100}
+                                        type="safety"
+                                        description="A measure of how clean the ingredient list is, based on known toxins and irritants."
+                                        level={result.product_status === 'SAFE' ? 'Clean & Safe' : result.product_status === 'MODERATE' ? 'Moderate Risk' : 'High Risk'}
+                                    />
+
+                                    {/* Wellness Match Card */}
+                                    {result.wellness_match && result.wellness_match.match_level !== "Unknown" ? (
+                                        <ScoreCard
+                                            title="Wellness Match"
+                                            score={result.wellness_match.score}
+                                            maxScore={100}
+                                            type="wellness"
+                                            description="How well this product aligns with your skin type, concerns, and age group."
+                                            level={result.wellness_match.match_level}
+                                        />
+                                    ) : (
+                                        <div className="bg-muted/30 rounded-xl border border-dashed border-muted-foreground/20 flex items-center justify-center p-6 text-muted-foreground text-sm text-center">
+                                            Complete your profile to see your Wellness Match score.
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Key Takeaways */}
+                                <KeyTakeaways result={result} />
+
+                                {/* Detailed Breakdown (Collapsible or Secondary) */}
+                                <Card title="Detailed Analysis">
+                                    <div className="grid grid-cols-3 gap-4 bg-muted/50 p-6 rounded-lg border border-border mb-6">
                                         <div>
                                             <div className="text-sm font-medium text-muted-foreground mb-1">Base Score</div>
                                             <div className="font-mono text-2xl font-semibold">{result.detailed_score_breakdown?.base_score || '-'}</div>
@@ -445,69 +470,6 @@ export default function Dashboard() {
                                         </div>
                                     </div>
 
-                                    {currentUser && (
-                                        <div className="mt-4 flex items-center gap-2">
-                                            <Button onClick={handleAddToFavorites} variant="outline" className="w-full">
-                                                <Heart className="w-4 h-4 mr-2" /> Add to Favorites
-                                            </Button>
-                                            {favMessage && <span className="text-sm text-emerald-400">{favMessage}</span>}
-                                        </div>
-                                    )}
-
-                                    <div className="mt-4">
-                                        <Button onClick={() => setShowShareCard(true)} variant="outline" className="w-full">
-                                            <Share2 className="w-4 h-4 mr-2" /> Share Result
-                                        </Button>
-                                    </div>
-                                </Card>
-
-                                {/* Suitability Warnings */}
-                                {(result.not_suitable_for_skin_type.length > 0 || result.not_suitable_for_skin_tone.length > 0) && (
-                                    <Card title="Suitability Warnings">
-                                        <div className="space-y-4">
-                                            {result.not_suitable_for_skin_type.length > 0 && (
-                                                <div>
-                                                    <h4 className="text-sm font-bold text-muted-foreground uppercase mb-2">Skin Type Mismatch</h4>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {result.not_suitable_for_skin_type.map((ing, i) => (
-                                                            <Badge key={i} variant="warning">{ing}</Badge>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {result.not_suitable_for_skin_tone.length > 0 && (
-                                                <div>
-                                                    <h4 className="text-sm font-bold text-muted-foreground uppercase mb-2">Skin Tone Mismatch</h4>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {result.not_suitable_for_skin_tone.map((ing, i) => (
-                                                            <Badge key={i} variant="warning">{ing}</Badge>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </Card>
-                                )}
-
-                                {/* Alternatives */}
-                                {alternatives.length > 0 && (
-                                    <Card title="Better Alternatives">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {alternatives.map((alt, i) => (
-                                                <div key={i} className="flex items-center space-x-4 p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
-                                                    <div className="flex-1">
-                                                        <h4 className="font-semibold">{alt.product_name}</h4>
-                                                        <p className="text-sm text-muted-foreground">{alt.brand}</p>
-                                                    </div>
-                                                    <Badge variant="success">{Math.round(alt.toxicity_score * 100)}</Badge>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </Card>
-                                )}
-
-                                {/* Ingredient Breakdown */}
-                                <Card title="Ingredient Analysis">
                                     <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
                                         <div className="max-h-96 overflow-y-auto custom-scrollbar">
                                             <table className="w-full text-sm text-left relative">
@@ -562,6 +524,11 @@ export default function Dashboard() {
             {showShareCard && result && (
                 <ShareCard product={result} onClose={() => setShowShareCard(false)} />
             )}
+
+            <OnboardingModal
+                isOpen={!!currentUser && !profileLoading && (!userProfile?.age_group || !userProfile?.skin_type)}
+                onClose={() => { }} // Mandatory, so no close action
+            />
         </div>
     );
 }

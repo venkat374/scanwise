@@ -5,6 +5,7 @@ from toxicity_engine import predict_toxicity
 from ingredient_cleaner import clean_ingredient_list
 from skin_engine import check_skin_type_suitability, check_skin_tone_suitability
 from product_scoring import calculate_product_toxicity
+from wellness_engine import calculate_wellness_match
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -51,6 +52,9 @@ class ProductRequest(BaseModel):
     ingredients_list: Optional[str] = None # For manual entry
     barcode: Optional[str] = None # For direct lookup
     category: Optional[str] = None # Product category (e.g. Moisturizer)
+    age_group: Optional[str] = None
+    skin_concerns: Optional[List[str]] = []
+    allergies: Optional[List[str]] = []
 
 @app.get("/search-products")
 def search_products_endpoint(q: str):
@@ -115,6 +119,15 @@ def scan_product(req: ProductRequest):
     bad_skin_type = check_skin_type_suitability(ingredients, req.skin_type)
     bad_skin_tone = check_skin_tone_suitability(ingredients, req.skin_tone)
 
+    # --- WELLNESS MATCH ENGINE ---
+    user_profile_data = {
+        "skin_type": req.skin_type,
+        "skin_concerns": req.skin_concerns,
+        "age_group": req.age_group,
+        "allergies": req.allergies
+    }
+    wellness_report = calculate_wellness_match(ingredients, user_profile_data)
+
     try:
         db = get_db()
         if db:
@@ -166,7 +179,8 @@ def scan_product(req: ProductRequest):
         "detailed_score_breakdown": detailed_score,
         "not_suitable_for_skin_type": bad_skin_type,
         "not_suitable_for_skin_tone": bad_skin_tone,
-        "category": req.category
+        "category": req.category,
+        "wellness_match": wellness_report
     }
 
 @app.get("/test-db")

@@ -8,6 +8,7 @@ const Autocomplete = ({ value, onChange, onSelect, placeholder, label, name }) =
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const wrapperRef = useRef(null);
+    const isSelecting = useRef(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -23,6 +24,11 @@ const Autocomplete = ({ value, onChange, onSelect, placeholder, label, name }) =
 
     useEffect(() => {
         const fetchSuggestions = async () => {
+            if (isSelecting.current) {
+                isSelecting.current = false;
+                return;
+            }
+
             if (value.length > 2) {
                 try {
                     const response = await axios.get(`${config.API_BASE_URL}/search-products?q=${encodeURIComponent(value)}`);
@@ -42,6 +48,7 @@ const Autocomplete = ({ value, onChange, onSelect, placeholder, label, name }) =
     }, [value]);
 
     const handleSelect = (item) => {
+        isSelecting.current = true;
         onSelect(item);
         setShowSuggestions(false);
     };

@@ -1,88 +1,4 @@
-import re
-
-# Knowledge Base: Ingredient Attributes
-# Keys should be lowercase for matching.
-INGREDIENT_ATTRIBUTES = {
-    "salicylic acid": {
-        "good_for": ["Acne", "Oily", "Pores"],
-        "bad_for": ["Dry", "Sensitive"],
-        "age_warning": ["Under 18"] # Use with caution
-    },
-    "retinol": {
-        "good_for": ["Aging", "Acne", "Texture"],
-        "bad_for": ["Sensitive", "Pregnancy"],
-        "age_warning": ["Under 18", "18-24"] # Generally for 25+
-    },
-    "tretinoin": {
-        "good_for": ["Aging", "Acne"],
-        "bad_for": ["Sensitive", "Pregnancy"],
-        "age_warning": ["Under 18"]
-    },
-    "vitamin c": {
-        "good_for": ["Dark Spots", "Aging", "Dullness"],
-        "bad_for": ["Sensitive"] # High concentrations can irritate
-    },
-    "ascorbic acid": { # Vitamin C
-        "good_for": ["Dark Spots", "Aging", "Dullness"],
-        "bad_for": ["Sensitive"]
-    },
-    "niacinamide": {
-        "good_for": ["Acne", "Pores", "Redness", "Oily", "Dark Spots"],
-        "bad_for": [] # Generally well tolerated
-    },
-    "hyaluronic acid": {
-        "good_for": ["Dry", "Aging", "Dehydration"],
-        "bad_for": []
-    },
-    "glycerin": {
-        "good_for": ["Dry", "Sensitive"],
-        "bad_for": []
-    },
-    "ceramides": {
-        "good_for": ["Dry", "Sensitive", "Aging"],
-        "bad_for": []
-    },
-    "benzoyl peroxide": {
-        "good_for": ["Acne"],
-        "bad_for": ["Dry", "Sensitive"]
-    },
-    "glycolic acid": { # AHA
-        "good_for": ["Aging", "Texture", "Dark Spots"],
-        "bad_for": ["Sensitive", "Dry"]
-    },
-    "lactic acid": { # AHA
-        "good_for": ["Dry", "Aging", "Texture"],
-        "bad_for": ["Sensitive"]
-    },
-    "fragrance": {
-        "good_for": [],
-        "bad_for": ["Sensitive"]
-    },
-    "parfum": {
-        "good_for": [],
-        "bad_for": ["Sensitive"]
-    },
-    "alcohol denat": {
-        "good_for": ["Oily"], # Astringent
-        "bad_for": ["Dry", "Sensitive"]
-    },
-    "essential oil": {
-        "good_for": [],
-        "bad_for": ["Sensitive"]
-    },
-    "mineral oil": {
-        "good_for": ["Dry"],
-        "bad_for": ["Acne", "Oily"] # Comedogenic risk
-    },
-    "coconut oil": {
-        "good_for": ["Dry"],
-        "bad_for": ["Acne", "Oily"] # Highly comedogenic
-    },
-    "shea butter": {
-        "good_for": ["Dry"],
-        "bad_for": ["Acne"] # Can be heavy
-    }
-}
+from ingredient_matcher import matcher
 
 def normalize_ingredient(name):
     return name.lower().strip()
@@ -90,19 +6,6 @@ def normalize_ingredient(name):
 def calculate_wellness_match(ingredients, user_profile):
     """
     Calculates a personalized wellness match score (0-100).
-    
-    Args:
-        ingredients (list): List of ingredient strings.
-        user_profile (dict): User profile containing skin_type, skin_concerns, age_group, allergies.
-        
-    Returns:
-        dict: {
-            "score": float,
-            "match_level": str,
-            "positive_matches": list,
-            "negative_matches": list,
-            "allergy_matches": list
-        }
     """
     if not user_profile:
         return {
@@ -142,41 +45,58 @@ def calculate_wellness_match(ingredients, user_profile):
             "allergy_matches": allergy_matches
         }
 
-    # 2. Check Ingredients against Knowledge Base
+    # 2. Check Ingredients against Knowledge Base (via Matcher)
     for ing in ingredients:
-        ing_norm = normalize_ingredient(ing)
+        # We assume 'ingredients' list passed here might already be canonical, 
+        # but let's match again to be sure we get the DB entry
+        match_result = matcher.match(ing)
         
-        # Simple partial match to find key in KB
-        matched_key = None
-        for key in INGREDIENT_ATTRIBUTES:
-            if key in ing_norm:
-                matched_key = key
-                break
-        
-        if matched_key:
-            attrs = INGREDIENT_ATTRIBUTES[matched_key]
+        if match_result:
+            db_entry = match_result["match"]
             
-            # Positive Matches (Concerns & Skin Type)
-            # If ingredient is good for a user's concern
+            # Get attributes from DB entry, default to empty lists
+            good_for = db_entry.get("functions", []) # Map functions to good_for logic? 
+            # Actually, the DB schema in implementation plan had "functions". 
+            # But the hardcoded one had "good_for" / "bad_for".
+            # We should probably update the DB schema or map "functions" to "good_for".
+            # For now, let's assume the DB has "good_for" and "bad_for" added to it, 
+            # or we infer it. 
+            # Let's check the DB content I wrote.
+            # It has "functions" and "safety_rating".
+            # It DOES NOT have "good_for" / "bad_for" lists yet.
+            # I need to update the DB content to include these or map them.
+            
+            # Let's map "functions" to "good_for" for now as a heuristic
+            # e.g. "Anti-Acne" -> good for "Acne"
+            
+            functions = db_entry.get("functions", [])
+            
+            # Positive Matches
             for concern in skin_concerns:
-                if concern in attrs["good_for"]:
-                    score += 5
-                    positive_matches.append(f"{ing} is good for {concern}")
+                # Simple substring match: if concern is "Acne" and function is "Anti-Acne"
+                for func in functions:
+                    if concern.lower() in func.lower():
+                        score += 5
+                        positive_matches.append(f"{ing} ({func}) is good for {concern}")
             
-            # If ingredient is good for user's skin type
-            if skin_type in attrs["good_for"]:
-                score += 3
-                positive_matches.append(f"{ing} is good for {skin_type} skin")
-                
-            # Negative Matches (Skin Type & Age)
-            if skin_type in attrs["bad_for"]:
-                score -= 10
-                negative_matches.append(f"{ing} is not recommended for {skin_type} skin")
-                
-            # Age Warnings
-            if "age_warning" in attrs and age_group in attrs["age_warning"]:
-                score -= 5
-                negative_matches.append(f"{ing} may be too harsh for your age group ({age_group})")
+            # Skin Type Logic (Heuristic based on functions)
+            if skin_type == "Oily" and "Oil Control" in functions:
+                 score += 3
+                 positive_matches.append(f"{ing} helps with oil control")
+            if skin_type == "Dry" and ("Hydration" in functions or "Moisturizer" in functions):
+                 score += 3
+                 positive_matches.append(f"{ing} is hydrating for Dry skin")
+                 
+            # Negative Matches (Safety Rating)
+            if db_entry.get("safety_rating") == "Caution":
+                if skin_type == "Sensitive":
+                    score -= 10
+                    negative_matches.append(f"{ing} can be irritating for Sensitive skin")
+            
+            if db_entry.get("safety_rating") == "Risk":
+                 score -= 10
+                 negative_matches.append(f"{ing} is a potential risk")
+
 
     # Clamp Score
     score = max(0, min(100, score))

@@ -1,0 +1,138 @@
+[
+    {
+        "name": "Water",
+        "synonyms": [
+            "Aqua",
+            "Eau",
+            "Purified Water",
+            "Distilled Water"
+        ],
+        "functions": [
+            "Solvent"
+        ],
+        "safety_rating": "Safe",
+        "description": "The most common base for skincare products."
+    },
+    {
+        "name": "Glycerin",
+        "synonyms": [
+            "Glycerol",
+            "Vegetable Glycerin"
+        ],
+        "functions": [
+            "Humectant",
+            "Moisturizer"
+        ],
+        "safety_rating": "Safe",
+        "description": "A powerful humectant that draws moisture into the skin."
+    },
+    {
+        "name": "Niacinamide",
+        "synonyms": [
+            "Vitamin B3",
+            "Nicotinamide"
+        ],
+        "functions": [
+            "Brightening",
+            "Anti-Acne",
+            "Barrier Repair"
+        ],
+        "safety_rating": "Safe",
+        "active_threshold": 2.0,
+        "description": "A versatile active that helps with pores, redness, and oil control."
+    },
+    {
+        "name": "Retinol",
+        "synonyms": [
+            "Vitamin A",
+            "Retinyl Palmitate",
+            "Retinyl Acetate"
+        ],
+        "functions": [
+            "Anti-Aging",
+            "Acne"
+        ],
+        "safety_rating": "Caution",
+        "active_threshold": 0.1,
+        "description": "The gold standard for anti-aging, but can be irritating."
+    },
+    {
+        "name": "Ascorbic Acid",
+        "synonyms": [
+            "L-Ascorbic Acid",
+            "Vitamin C",
+            "Pure Vitamin C"
+        ],
+        "functions": [
+            "Brightening",
+            "Antioxidant",
+            "Collagen Boosting"
+        ],
+        "safety_rating": "Safe",
+        "active_threshold": 5.0,
+        "description": "Potent antioxidant that brightens skin and fights free radicals."
+    },
+    {
+        "name": "Phenoxyethanol",
+        "synonyms": [
+            "2-Phenoxyethanol"
+        ],
+        "functions": [
+            "Preservative"
+        ],
+        "safety_rating": "Safe",
+        "description": "Common preservative used to prevent bacterial growth. Usually capped at 1%."
+    },
+    {
+        "name": "Hyaluronic Acid",
+        "synonyms": [
+            "Sodium Hyaluronate",
+            "Hydrolyzed Hyaluronic Acid"
+        ],
+        "functions": [
+            "Hydration",
+            "Plumping"
+        ],
+        "safety_rating": "Safe",
+        "description": "Holds 1000x its weight in water to hydrate the skin."
+    },
+    {
+        "name": "Salicylic Acid",
+        "synonyms": [
+            "BHA",
+            "Beta Hydroxy Acid"
+        ],
+        "functions": [
+            "Exfoliant",
+            "Anti-Acne"
+        ],
+        "safety_rating": "Caution",
+        "active_threshold": 0.5,
+        "description": "Oil-soluble exfoliant that penetrates pores to clear acne."
+    },
+    {
+        "name": "Fragrance",
+        "synonyms": [
+            "Parfum",
+            "Perfume",
+            "Aroma"
+        ],
+        "functions": [
+            "Scent"
+        ],
+        "safety_rating": "Risk",
+        "description": "Can cause irritation and allergic reactions in sensitive skin."
+    },
+    {
+        "name": "Dimethicone",
+        "synonyms": [
+            "Polydimethylsiloxane"
+        ],
+        "functions": [
+            "Emollient",
+            "Texture Enhancer"
+        ],
+        "safety_rating": "Safe",
+        "description": "A silicone that forms a protective barrier and gives a silky feel."
+    }
+]

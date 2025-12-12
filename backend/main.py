@@ -107,13 +107,33 @@ def scan_product(req: ProductRequest):
 
     ingredients = clean_ingredient_list(ingredients)
     # ... rest of the logic ...
+    # --- INGREDIENT MATCHING (DEEP TECH) ---
+    from ingredient_matcher import matcher
+    
+    canonical_ingredients = []
+    # We keep a mapping to show the user what we found vs what they scanned if needed
+    # For now, just replace with canonical names where possible
+    
+    for ing in ingredients:
+        match_result = matcher.match(ing)
+        if match_result:
+            # Use the canonical name from our DB
+            canonical_ingredients.append(match_result["match"]["name"])
+        else:
+            # Keep original if no match found
+            canonical_ingredients.append(ing)
+            
+    # Use canonical list for analysis
+    ingredients = canonical_ingredients
+
     toxicity = predict_toxicity(ingredients)
 
-    # Pass usage parameters to the scoring engine
+    # Pass usage parameters AND category to the scoring engine
     product_score, product_status, detailed_score = calculate_product_toxicity(
         toxicity, 
         req.usage_frequency, 
-        req.amount_applied
+        req.amount_applied,
+        req.category or "general" # Default to general if None
     )
 
     bad_skin_type = check_skin_type_suitability(ingredients, req.skin_type)
@@ -128,12 +148,17 @@ def scan_product(req: ProductRequest):
     }
     wellness_report = calculate_wellness_match(ingredients, user_profile_data)
 
+    # --- EFFICACY ENGINE (PHASE 3) ---
+    from efficacy_engine import calculate_efficacy
+    
+    efficacy_report = calculate_efficacy(ingredients, req.category or "general")
+
     try:
         db = get_db()
         if db:
             # --- SUSPICIOUS PRODUCT DETECTION ---
             from suspicious_detection import detect_suspicious_product
-
+            
             is_suspicious = detect_suspicious_product(req.product_name, req.category)
             db_status = "flagged" if is_suspicious else "active"
 
@@ -141,6 +166,7 @@ def scan_product(req: ProductRequest):
                 "product_name": req.product_name,
                 "ingredients": ingredients,
                 "toxicity_score": product_score,
+                "efficacy_score": efficacy_report["efficacy_score"], # NEW
                 "product_status": product_status,
                 "category": req.category,
                 "timestamp": datetime.now(),
@@ -180,7 +206,8 @@ def scan_product(req: ProductRequest):
         "not_suitable_for_skin_type": bad_skin_type,
         "not_suitable_for_skin_tone": bad_skin_tone,
         "category": req.category,
-        "wellness_match": wellness_report
+        "wellness_match": wellness_report,
+        "efficacy_report": efficacy_report # NEW
     }
 
 @app.get("/test-db")

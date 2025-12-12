@@ -30,22 +30,6 @@ export default function ScoreCard({ title, score, maxScore = 100, type = 'safety
             textClass = 'text-amber-600';
             if (!level) label = 'Moderate Risk';
         } else {
-            colorClass = 'bg-red-500';
-            textClass = 'text-red-600';
-            if (!level) label = 'High Risk';
-        }
-    } else {
-        // Wellness: High score is GOOD (Green)
-        if (score >= 80) {
-            colorClass = 'bg-emerald-500';
-            textClass = 'text-emerald-600';
-            if (!level) label = 'Great Match';
-        } else if (score >= 50) {
-            colorClass = 'bg-blue-500';
-            textClass = 'text-blue-600';
-            if (!level) label = 'Fair Match';
-        } else {
-            colorClass = 'bg-red-500';
             textClass = 'text-red-600';
             if (!level) label = 'Poor Match';
         }

@@ -2,7 +2,7 @@
 
 ScanWise is a next-generation skincare assistant that combines **Ingredient Safety Analysis** with **AI-Driven Skin Diagnostics**. Unlike extensive skincare encyclopedias, ScanWise analyzes *your* face to understand your unique skin needs (Acne, Dryness, Wrinkles) and recommends safe, non-toxic products that actually work for you.
 
-![ScanWise Dashboard](https://via.placeholder.com/800x400?text=ScanWise+Dashboard+Preview)
+![ScanWise Dashboard](https://scanwise-five.vercel.app/)
 
 ## 🗺️ Project Flow & User Journey
 

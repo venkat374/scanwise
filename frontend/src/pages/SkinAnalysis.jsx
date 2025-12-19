@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function SkinAnalysis() {
-    const { currentUser, userProfile } = useAuth();
+    const { currentUser, userProfile, refreshProfile } = useAuth();
     const navigate = useNavigate();
     const [image, setImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -104,6 +104,13 @@ export default function SkinAnalysis() {
             setIsRescanning(false); // Done rescanning
 
             setLoading(false); // Unblock UI immediately so Report shows up
+
+            // Wait for backend to be consistent then refresh profile context
+            // This ensures Dashboard doesn't show "Personalize" modal again
+            setTimeout(() => {
+                refreshProfile();
+            }, 1000);
+
             fetchRecommendations(skinReport); // Fetch products in background
 
         } catch (err) {

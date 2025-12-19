@@ -30,39 +30,26 @@ class IncidecoderClient:
             for p in products:
                 name_lower = p.get("name", "").lower()
                 brand_lower = p.get("brand", "").lower()
+                full_text = f"{name_lower} {brand_lower}"
                 
-                # Check if ALL tokens from query are present in the product name OR brand
-                # This handles "Nivea Body Lotion" matching "Nivea Nourishing Body Milk"
-                # (tokens: nivea, body, lotion. 'lotion' might not be in 'milk', so maybe we need ANY match or high overlap?)
-                
-                # Let's try a slightly looser match:
-                # If the query has multiple words, we want most of them to match.
-                # But "Nivea Body Lotion" -> "Nivea Nourishing Body Milk"
-                # Tokens: [nivea, body, lotion] vs [nivea, nourishing, body, milk]
-                # Matches: nivea, body. Miss: lotion.
-                
-                # If we enforce ALL, "lotion" will fail.
-                # So let's use a scoring system or just check if the Brand matches + some part of the name.
-                
-                # Simple heuristic:
-                # 1. Brand match is strong signal.
-                # 2. If query is short (<4 chars), exact substring.
-                # 3. If query is long, check for token overlap.
-                
-                # For now, let's stick to the user's specific case: "Nivea Body Lotion"
-                # If we just split query and check if *most* tokens are present?
-                
-                # Actually, "Body Milk" is a type of lotion.
-                # Let's just do a simpler check:
-                # If 2 or more tokens match, include it.
+                # Tokenize product text for accurate matching
+                # Replace punctuation that might glue words
+                text_tokens = set(full_text.replace("-", " ").replace("(", " ").replace(")", " ").split())
                 
                 matches = 0
                 for token in query_tokens:
-                    if token in name_lower or token in brand_lower:
+                    # 1. Exact word match
+                    if token in text_tokens:
+                        matches += 1
+                    # 2. Substring match only for deeper/longer tokens (e.g. "hydrate" in "hydrating")
+                    elif len(token) > 2 and token in full_text:
                         matches += 1
                 
-                # If we have > 50% token match or it's a substring
-                if query_lower in name_lower or (len(query_tokens) > 1 and matches >= len(query_tokens) - 1):
+                # Require ALL tokens to match (strict) or very high overlap
+                if matches == len(query_tokens):
+                     results.append(p)
+                # Fallback: exact phrase match always wins
+                elif query_lower in full_text and p not in results:
                      results.append(p)
 
             return results

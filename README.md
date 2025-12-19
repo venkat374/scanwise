@@ -4,26 +4,55 @@ ScanWise is a next-generation skincare assistant that combines **Ingredient Safe
 
 ![ScanWise Dashboard](https://scanwise-five.vercel.app/)
 
-## 🚀 Key Features
+## �️ Project Flow & User Journey
 
-### 1. 🧬 AI Skin Analysis
-*   **Face Scan**: Upload a selfie to instantly analyze your skin type (Oily, Dry, Combination) and condition.
-*   **Condition Detection**: Detects concerns like Acne, Pigmentation, Wrinkles, and Redness using Google Gemini Vision AI.
-*   **Privacy First**: Images are processed in real-time and **never stored** on our servers.
+ScanWise guides users through a scientifically backed skincare journey:
 
-### 2. 🧪 Toxicity & Safety Engine
-*   **Ingredient Analysis**: detailed breakdown of product ingredients with safety ratings (Safe, Low Risk, High Risk).
-*   **Toxicity Score**: A precise 0-100 safety score for every product.
-*   **Smart Filtering**: Automatically filters out products containing allergens or irritants harmful to *your* specific skin barriers.
+### 1. Onboarding & Profiling
+*   **Sign Up**: Users create a secure profile.
+*   **Initial Profile**: Users input basic details (Age, Known Sensitivities).
+*   **AI Face Scan (Core Feature)**: 
+    *   User uploads a selfie.
+    *   **Gemini AI** analyzes the image for texture, pores, pigmentation, and barrier health.
+    *   System generates a **Skin Health Report** (e.g., "Oily Skin with High Sensitivity").
 
-### 3. 🎯 Personalized Recommendations
-*   **Smart Matching**: Recommendations aren't just generic lists. If you need Vitamin C, ScanWise finds the *safest* Vitamin C serum for your skin type.
-*   **Curated Catalog**: verified database of high-quality, safe products (Sunscreen, Moisturizer, Serums, Exfoliants).
+### 2. Analysis & Diagnosis
+*   **Report Generation**: The backend computes severity scores (0-100) for dryness, acne, and aging.
+*   **Result**: User sees a visual dashboard of their skin's current state.
 
-### 4. 📱 Modern Experience
-*   **Barcode & OCR**: Scan product bottles directly (Feature in Beta).
-*   **Routine Manager**: Build and track your customized skincare routine.
-*   **Fast & Responsive**: Built with a sleek, dark-mode compatible UI.
+### 3. Personalized Recommendation
+*   **Matching Engine**: Based on the diagnosis (e.g., "Need Barrier Repair"), the system queries the **Curated Safety Database**.
+*   **Safety Check**: Products are filtered by **Toxicity Score** (< 40) and specific ingredient compatibility (e.g., No Alcohol for Dry Skin).
+*   **Output**: 3-5 hyper-relevant product suggestions per category (Cleanser, Serum, Moisturizer).
+
+### 4. Toxicity Analysis (Product Scan)
+*   **Manual/Barcode Entry**: Users can check products they already own.
+*   **Ingredient Breakdown**: The system parses ingredient lists, identifying carcinogens, allergens, or endocrine disruptors.
+*   **Verdict**: Returns a "Safe", "Low Risk", or "High Risk" verdict instantly.
+
+---
+
+## 🚀 Key Features In-Depth
+
+### 1. 🧬 AI Skin Analysis Engine
+*   **Model**: Google Gemini Pro Vision.
+*   **Capabilities**:
+    *   **Skin Type Detection**: Precision classification (Oily, Dry, Combination, Normal).
+    *   **Condition Mapping**: Identifies 6+ specific concerns: Acne, Fine Lines, Pigmentation, Redness, Dehydration, Dullness.
+    *   **Privacy Architecture**: Stateless processing. Images are analyzed in-memory and discarded immediately.
+
+### 2. 🧪 Toxicity Scoring System
+*   **Algorithm**: Weighted Ingredient Risk Analysis.
+*   **Data Source**: Custom toxicity database (seed data) + Incidecoder integration.
+*   **Scoring Logic**:
+    *   Each ingredient is assigned a risk level (0-10).
+    *   **Product Score** = Weighted average of ingredient risks + Penalties for "The Dirty Dozen" (Parabens, Sulfates, etc.).
+    *   **Smart Filtering**: Automatically hides high-toxicity products from recommendations.
+
+### 3. �️ Robust Backend Architecture
+*   **FastAPI**: High-performance async Python framework.
+*   **Firebase Firestore**: NoSQL real-time database for user profiles and product catalog.
+*   **Dependency Injection**: Modular design for Authentication, DB access, and AI services.
 
 ---
 
@@ -32,14 +61,14 @@ ScanWise is a next-generation skincare assistant that combines **Ingredient Safe
 ### Frontend
 *   **Framework**: React (Vite)
 *   **Styling**: TailwindCSS
-*   **Icons**: Lucide React
-*   **State**: Context API
+*   **UI Components**: Lucide React, Custom Cards/Modals
+*   **State Management**: Context API (Auth, Profile)
 
 ### Backend
 *   **API**: FastAPI (Python)
 *   **Database**: Firebase Firestore
 *   **AI**: Google Gemini Pro Vision
-*   **Data Processing**: Pandas, Scikit-learn (Toxicity Models)
+*   **Libraries**: Pandas, Scikit-learn, Beautifulsoup4
 
 ---
 
@@ -99,18 +128,19 @@ npm run dev
 ```
 ScanWise/
 ├── backend/
-│   ├── main.py                 # API Entry Point
-│   ├── skin_engine.py          # AI Skin Analysis Logic
-│   ├── toxicity_engine.py      # Ingredient Safety Logic
-│   ├── requirements.txt        # Python Dependencies
+│   ├── main.py                 # API Entry Point & Endpoints
+│   ├── skin_engine.py          # Gemini AI Integration & Logic
+│   ├── toxicity_engine.py      # Ingredient Safety Calculator
+│   ├── fetch_ingredients.py    # Product Data Fetching
+│   ├── requirements.txt        # Production Dependencies
 │   └── serviceAccountKey.json  # Firebase Credentials (Ignored)
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── Dashboard.jsx   # Main User Hub
-│   │   │   └── SkinAnalysis.jsx # AI Analysis UI
-│   │   └── components/         # Reusable UI Components
+│   │   │   ├── Dashboard.jsx   # Main Hub & Loading Logic
+│   │   │   ├── SkinAnalysis.jsx # Face Scan UI & Results
+│   │   └── components/         # Reusable UI (Cards, Modals)
 │   └── package.json
 │
 └── README.md
@@ -119,8 +149,8 @@ ScanWise/
 ## 🤝 Contributing
 
 This project is currently in **Production Readiness** mode.
-*   **Clean Code**: All debug scripts have been removed.
-*   **Optimized**: Dependencies are minified and strict.
+*   **Code Quality**: Cleaned of all debug/test scripts (`seed_*.py`, `debug_*.py`).
+*   **Performance**: Optimized for fast load times and minimal latency.
 
 ## 📄 License
 MIT License.

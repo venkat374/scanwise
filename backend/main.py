@@ -12,6 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+@app.get("/")
+def health_check():
+    return {"status": "ok", "message": "ScanWise API v2 is running"}
+
 # CORS FIX
 # CORS FIX
 origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")

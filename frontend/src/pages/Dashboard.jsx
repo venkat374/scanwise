@@ -136,7 +136,7 @@ export default function Dashboard() {
                 skin_report: userProfile?.latest_skin_report || {} // Use profile if available
             };
 
-            const res = await axios.post(`${config.API_BASE_URL}/suggest-products`, payload);
+            const res = await axios.post(`${config.API_BASE_URL}/suggest-products`, payload, { timeout: 60000 });
             setBrowseProducts(res.data || []);
         } catch (err) {
             console.error("Browse error", err);
@@ -231,7 +231,7 @@ export default function Dashboard() {
         };
 
         try {
-            const response = await axios.post(`${config.API_BASE_URL}/scan-product`, payload);
+            const response = await axios.post(`${config.API_BASE_URL}/scan-product`, payload, { timeout: 60000 });
             if (response.data.error) {
                 setError(response.data.error);
             } else {

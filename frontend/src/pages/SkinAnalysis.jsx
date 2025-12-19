@@ -46,7 +46,7 @@ export default function SkinAnalysis() {
             // 2. Get Category Recommendations
             const checkRes = await axios.post(`${config.API_BASE_URL}/recommend-categories`, {
                 skin_report: skinReport
-            });
+            }, { timeout: 60000 });
             const recs = checkRes.data;
             setRecommendations(recs);
 
@@ -60,7 +60,7 @@ export default function SkinAnalysis() {
                     const prodRes = await axios.post(`${config.API_BASE_URL}/suggest-products`, {
                         category: queryCategory,
                         skin_report: skinReport
-                    });
+                    }, { timeout: 60000 });
                     if (prodRes.data && prodRes.data.length > 0) {
                         suggestions[rec.category] = prodRes.data;
                     }
@@ -94,7 +94,8 @@ export default function SkinAnalysis() {
                 headers: {
                     ...headers,
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                timeout: 90000 // Allow 90s for image upload + Gemini AI Analysis
             });
 
             if (analysisRes.data.error) throw new Error(analysisRes.data.error);

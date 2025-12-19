@@ -92,9 +92,9 @@ def search_products_endpoint(q: str):
     for p in products:
         results.append({
             "product_name": p.get("product_name", "Unknown"),
-            "brands": p.get("brands", "Unknown"),
-            "image_url": p.get("image_small_url", ""),
-            "id": p.get("_id", "")
+            "brands": p.get("brand") or p.get("brands", "Unknown"), # Handle both
+            "image_url": p.get("image_url") or p.get("image_small_url", ""),
+            "id": p.get("id") or p.get("barcode") or p.get("_id", "") 
         })
     return results
 
@@ -669,10 +669,22 @@ def suggest_products_endpoint(req: ProductSuggestionRequest):
             FALLBACK_MAP = {
                 "Retinol": ("Serum", "Retinol"),
                 "Vitamin C": ("Serum", "Vitamin C"),
+                "Vitamin C Serum": ("Serum", "Vitamin C"),
+                "Vit C": ("Serum", "Vitamin C"),
                 "Niacinamide": ("Serum", "Niacinamide"),
-                "Exfoliant": ("Toner", "Exfoliant"), # Or Cleanser, but Toner is common for BHA
+                "Niacinamide Serum": ("Serum", "Niacinamide"),
+                "Exfoliant": ("Toner", "Exfoliant"),
                 "Bha": ("Toner", "BHA"),
-                "Salicylic Acid": ("Cleanser", "Salicylic")
+                "Bha Toner": ("Toner", "BHA"),
+                "Salicylic Acid": ("Cleanser", "Salicylic"),
+                "Salicylic Acid Cleanser": ("Cleanser", "Salicylic"),
+                "Hyaluronic Acid": ("Serum", "Hyaluronic"),
+                "Hydrating Serum": ("Serum", "Hyaluronic"),
+                "Sunscreen": ("Sunscreen", "Sunscreen"),
+                "Spf": ("Sunscreen", "SPF"),
+                "Moisturizer": ("Moisturizer", "Moisturizer"),
+                "Cleanser": ("Cleanser", "Cleanser"),
+                "Toner": ("Toner", "Toner")
             }
             
             mapping = FALLBACK_MAP.get(category_name) or FALLBACK_MAP.get(category_name.title()) 
@@ -765,11 +777,51 @@ from incidecoder_client import IncidecoderClient
 @app.get("/ingredient-details/{ingredient_name}")
 async def get_ingredient_details(ingredient_name: str):
     """
-    Fetches detailed ingredient information from Incidecoder.
+    Fetches detailed ingredient information. 
+    Prioritizes Incidecoder, but falls back to/enriches with Gemini AI if description is missing.
     """
-    # Check cache or DB first (future optimization)
-    # For now, fetch directly
-    details = IncidecoderClient.fetch_ingredient_details(ingredient_name)
+    details = None
+    try:
+        details = IncidecoderClient.fetch_ingredient_details(ingredient_name)
+    except Exception:
+        pass # Ignore scraper errors, fallback to AI
+
+    # Check if we need AI (missing data or weak description)
+    needs_ai = False
     if not details:
-        raise HTTPException(status_code=404, detail="Ingredient details not found")
+        needs_ai = True
+        details = {
+            "name": ingredient_name,
+            "description": None,
+            "functions": [],
+            "quick_facts": []
+        }
+    elif not details.get("description") or len(details["description"]) < 10 or "no description" in details["description"].lower():
+        needs_ai = True
+
+    if needs_ai:
+        print(f"Fetching AI explanation for {ingredient_name}...")
+        ai_res = explain_ingredient_with_ai(ingredient_name)
+        
+        if not ai_res.get("error"):
+            # Enrich/Overwrite with AI data
+            if not details.get("description") or "no description" in (details.get("description") or "").lower():
+                details["description"] = ai_res.get("description")
+            
+            # Map AI fields to Incidecoder structure if missing
+            if not details.get("functions") and ai_res.get("common_uses"):
+                details["functions"] = [ai_res["common_uses"]]
+                
+            # Add safety info to quick facts
+            details["quick_facts"].append(f"Risk Level: {ai_res.get('risk_level')}")
+            if ai_res.get("side_effects") and ai_res.get("side_effects") != "Unknown":
+                details["quick_facts"].append(f"Side Effects: {ai_res.get('side_effects')}")
+                
+            details["source"] = "AI + Incidecoder"
+        else:
+             if not details.get("description"):
+                 details["description"] = "Description not available."
+    else:
+        details["source"] = "Incidecoder"
+
     return details

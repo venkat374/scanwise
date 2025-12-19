@@ -4,6 +4,22 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 from datetime import datetime
+import hashlib
+from incidecoder_client import IncidecoderClient
+# Try/Except imports incase relative paths are messy in some envs
+try:
+    from toxicity_engine import predict_toxicity
+except ImportError:
+    # If standard import fails, try relative or assume local
+    import sys
+    import sys
+    sys.path.append(os.path.dirname(__file__))
+    from toxicity_engine import predict_toxicity
+    from product_scoring import calculate_product_toxicity
+try:
+    from product_scoring import calculate_product_toxicity
+except ImportError:
+    pass # Handled above or path issue
 
 # --- CONFIGURATION ---
 st.set_page_config(
@@ -85,7 +101,7 @@ st.markdown("Manage crowdsourced product data and view statistics.")
 
 # Sidebar
 st.sidebar.header("Navigation")
-page = st.sidebar.radio("Go to", ["Dashboard", "Product Manager", "Add Product", "User Stats"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Product Manager", "Add Product", "Web Scraper", "User Stats"])
 
 if page == "Dashboard":
     st.header("Overview")
@@ -296,6 +312,115 @@ elif page == "Add Product":
                     doc_ref.set(new_product)
                     st.success(f"Successfully added {product_name} ({barcode})!")
                     
+elif page == "Web Scraper":
+    st.header("Web Scraper (Incidecoder)")
+    st.markdown("Search for products online and import them directly into the database.")
+    
+    with st.form("scraper_form"):
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            query = st.text_input("Product Name / Keyword", placeholder="e.g. Vitamin C Serum")
+        with col2:
+            limit = st.number_input("Max Results", 1, 20, 5)
+            
+        search_btn = st.form_submit_button("Search Online")
+    
+    if search_btn and query:
+        with st.spinner(f"Searching for '{query}'..."):
+             st.session_state["scraper_results"] = IncidecoderClient.search_online(query, limit=limit)
+             st.session_state["scraper_query"] = query
+
+    if "scraper_results" in st.session_state:
+        results = st.session_state["scraper_results"]
+        if not results:
+             st.warning(f"No products found for '{st.session_state.get('scraper_query','')}'")
+        else:
+            st.success(f"Found {len(results)} products for '{st.session_state.get('scraper_query','')}'")
+            
+            for idx, prod in enumerate(results):
+                with st.expander(f"{prod['product_name']} ({prod['brand']})", expanded=(idx < 2)):
+                    c1, c2 = st.columns([1, 4])
+                    
+                    with c1:
+                        if prod.get("image"):
+                            st.image(prod["image"], width=100)
+                        else:
+                            st.text("No Image")
+                            
+                    with c2:
+                        st.write(f"**Brand:** {prod['brand']}")
+                        st.markdown(f"[View Source]({prod['link']})")
+                        
+                        # Category Selector (Default to smart guess or General)
+                        guess_cat = "Skincare"
+                        if "serum" in prod["product_name"].lower(): guess_cat = "Serum"
+                        elif "moisturizer" in prod["product_name"].lower(): guess_cat = "Moisturizer"
+                        elif "cleanser" in prod["product_name"].lower(): guess_cat = "Cleanser"
+                        elif "toner" in prod["product_name"].lower(): guess_cat = "Toner"
+                        elif "sunscreen" in prod["product_name"].lower(): guess_cat = "Sunscreen"
+                        
+                        selected_cat = st.selectbox("Category", ["Moisturizer", "Serum", "Cleanser", "Sunscreen", "Toner", "Skincare"], index=["Moisturizer", "Serum", "Cleanser", "Sunscreen", "Toner", "Skincare"].index(guess_cat) if guess_cat in ["Moisturizer", "Serum", "Cleanser", "Sunscreen", "Toner", "Skincare"] else 5, key=f"cat_{idx}")
+                        
+                        ingredients = prod.get("ingredients", [])
+                        st.write(f"**Ingredients Found:** {len(ingredients)}")
+                        with st.expander("See Ingredients"):
+                            st.write(", ".join(ingredients))
+                            
+                        # Add Button
+                        if st.button(f"Import to DB #{idx}", key=f"import_{idx}"):
+                            # 1. Generate ID
+                            # Create a deterministic hash based on name + brand
+                            raw_id = f"{prod['brand']}_{prod['product_name']}".lower().encode('utf-8')
+                            generated_barcode = f"WEB-{hashlib.md5(raw_id).hexdigest()[:10]}"
+                            
+                            # 2. Calculate Toxicity
+                            # Clean ingredients logic could go here, but predict_toxicity usually handles strings
+                            # We should map ingredients for better accuracy if possible, but basic list is fine
+                            # Assume 'predict_toxicity' takes a list or string. 
+                            # Checking codebase, predict_toxicity(ingredients_list: list) -> float
+                            
+                            # Sanitize ingredients
+                            clean_ing = [i.strip() for i in ingredients if i.strip()]
+                            
+                            # Calculate Score
+                            try:
+                                ing_report = predict_toxicity(clean_ing)
+                                score, _, _ = calculate_product_toxicity(ing_report)
+                                score = score * 100 # Convert 0-1 to 0-100
+                                # Scale score to 0-100 if needed, usually it is 0.0-1.0
+                                # But frontend expects 0-100?
+                                # Looking at skin_engine, it usually returns 0-100 "safe score" or 0-1 "toxic score".
+                                # calculate_product_toxicity returns 0-1.
+                                # Let's assume database uses 0-1 or we check existing data.
+                                # Existing data in Add Product used 0-10 input. 
+                                # Let's stick to 0-1 float for now, as that's what the engine returns.
+                            except Exception as e:
+                                st.error(f"Error calculating score: {e}")
+                                score = 0.0
+                            
+                            # 3. Create Product Doc
+                            new_product = {
+                                "product_name": prod["product_name"],
+                                "brand": prod["brand"],
+                                "category": selected_cat,
+                                "ingredients": clean_ing,
+                                "image_url": prod.get("image"),
+                                "toxicity_score": score,
+                                "product_status": "analyzed",
+                                "db_status": "active",
+                                "source": "web_scrape",
+                                "source_link": prod.get("link"),
+                                "timestamp": datetime.now()
+                            }
+                            
+                            # Check if exists
+                            doc_ref = db.collection("products").document(generated_barcode)
+                            if doc_ref.get().exists:
+                                st.warning(f"Product already exists with ID: {generated_barcode}")
+                            else:
+                                doc_ref.set(new_product)
+                                st.success(f"Imported '{prod['product_name']}' with Score: {score}!")
+
 elif page == "User Stats":
     st.header("User Statistics")
     st.info("Coming soon...")

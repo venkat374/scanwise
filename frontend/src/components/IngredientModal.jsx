@@ -140,7 +140,7 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
                 {/* Footer */}
                 <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-center shrink-0">
                     <p className="text-xs text-zinc-400">
-                        Data sourced from Incidecoder.
+                        Data given by ScanWise AI.
                     </p>
                 </div>
 

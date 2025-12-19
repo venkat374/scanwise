@@ -40,6 +40,16 @@ def clean_ingredient(ing):
     ing = ing.replace("Citroneld pha", "Citronellol")
     ing = ing.replace("Feel Oil", "Peel Oil")
     ing = ing.replace("Searate", "Stearate")
+    
+    # Normalize bilingual names (e.g., "Water/Eau" -> "Water")
+    # But be careful not to break chemical names with slashes (though rare in basic lists)
+    # Usually "Name/Name" with spaces or CamelCase is bilingual.
+    if "/" in ing:
+        parts = ing.split("/")
+        # If the first part looks like a valid name, take it.
+        # Simple heuristic: take the first part if it's longer than 2 chars
+        if len(parts[0].strip()) > 2:
+            ing = parts[0].strip()
 
     return ing.strip()
 

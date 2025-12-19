@@ -1,38 +1,29 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-*.p12
-serviceAccountKey.json
-**/serviceAccountKey.json
-secrets.json
-client_secret.json
-
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+venv/
+.env
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+db.sqlite3
+*.db
+*.sqlite3
+
+# ScanWise Specific
+serviceAccountKey.json
+output.txt
+stats.txt
+
+# Node
+node_modules/
+dist/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
+# IDE
+.vscode/
+.idea/

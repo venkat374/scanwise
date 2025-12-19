@@ -10,40 +10,61 @@ import Badge from '../components/Badge';
 import config from "../config";
 
 export default function Routine() {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState(() => {
+        const saved = localStorage.getItem('routine_products');
+        return saved ? JSON.parse(saved) : [];
+    });
     const [analysis, setAnalysis] = useState(null);
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
+    // Save to localStorage whenever products change
+    React.useEffect(() => {
+        localStorage.setItem('routine_products', JSON.stringify(products));
+    }, [products]);
+
     const handleAddProduct = (product) => {
-        if (products.find(p => p.id === product.id)) return;
+        // Fallback ID if missing
+        const productId = product.id || product.product_name;
 
-        // We need ingredients. If the search result doesn't have them (it might just be name/brand),
-        // we might need to fetch them. But let's assume for now we can get them or user adds manually.
-        // Actually, search-products endpoint returns id, name, brand.
-        // We might need to fetch details.
-        // For simplicity, let's just add it and if ingredients are missing, we can't analyze fully.
-        // But wait, the backend needs ingredients.
-        // So we should fetch product details when adding.
+        // Robust duplicate check (check ID or Name)
+        if (products.find(p => p.id === productId || p.name === product.product_name)) {
+            // Optional: visual feedback that it's already there?
+            setSearchQuery('');
+            return;
+        }
 
-        axios.get(`${config.API_BASE_URL}/scan-barcode?barcode=${product.id}`)
+        // Optimistic UI update? No, let's wait for details but maybe show loading?
+        // For now, assume standard flow.
+
+        // Use scan-product to get full details including ingredients
+        axios.post(`${config.API_BASE_URL}/scan-product`, {
+            product_name: product.product_name,
+            barcode: product.id // pass original ID which might be URL
+        })
             .then(res => {
                 const fullProduct = res.data;
-                setProducts([...products, {
-                    id: fullProduct.barcode || Math.random().toString(),
-                    name: fullProduct.product_name,
-                    ingredients: fullProduct.ingredients_text ? fullProduct.ingredients_text.split(',').map(i => i.trim()) : []
+
+                if (!fullProduct.ingredients || fullProduct.ingredients.length === 0) {
+                    console.warn("No ingredients found for", product.product_name);
+                }
+
+                setProducts(current => [...current, {
+                    id: productId,
+                    name: fullProduct.product_name || product.product_name,
+                    ingredients: fullProduct.ingredients || []
                 }]);
                 setSearchQuery('');
             })
             .catch(err => {
                 console.error("Failed to fetch product details", err);
-                // Fallback: add with empty ingredients (user might need to edit? No edit feature yet)
-                setProducts([...products, {
-                    id: product.id,
+                // Fallback: add with empty ingredients
+                setProducts(current => [...current, {
+                    id: productId,
                     name: product.product_name,
                     ingredients: []
                 }]);
+                setSearchQuery('');
             });
     };
 

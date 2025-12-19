@@ -1,7 +1,8 @@
-import React from 'react';
-import { Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { Info, ChevronDown, ChevronUp } from 'lucide-react';
 
-export default function ScoreCard({ title, score, maxScore = 100, type = 'safety', description, level }) {
+export default function ScoreCard({ title, score, maxScore = 100, type = 'safety', description, level, ...props }) {
+    const [isExpanded, setIsExpanded] = useState(false);
     // type: 'safety' (Low score is good) or 'wellness' (High score is good)
 
     let percentage = (score / maxScore) * 100;
@@ -79,6 +80,30 @@ export default function ScoreCard({ title, score, maxScore = 100, type = 'safety
                                 "May not be suitable for your skin type or concerns."
                     )}
                 </p>
+
+                {/* Details Section */}
+                {props.details && props.details.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-border">
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="flex items-center justify-between w-full text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            <span>Why this score?</span>
+                            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                        </button>
+
+                        {isExpanded && (
+                            <ul className="space-y-1 mt-3 animate-in slide-in-from-top-1 duration-200">
+                                {props.details.map((detail, idx) => (
+                                    <li key={idx} className="text-xs flex items-start gap-1.5">
+                                        <span className="mt-0.5 block w-1 h-1 rounded-full bg-current opacity-50 shrink-0" />
+                                        <span>{typeof detail === 'string' ? detail : detail.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

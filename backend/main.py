@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import os
 from pydantic import BaseModel
 from fetch_ingredients import get_ingredients_from_product
 from toxicity_engine import predict_toxicity
@@ -12,9 +13,12 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 # CORS FIX
+# CORS FIX
+origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,6 +44,27 @@ from typing import Optional, List
 from fastapi import Depends, HTTPException
 from firebase_admin import firestore
 from fetch_ingredients import get_ingredients_from_product, search_products
+from incidecoder_client import IncidecoderClient
+
+def analyze_ingredients_with_graph(ingredients, category="general"):
+    """
+    Helper to analyze a list of ingredients and return full toxicity report.
+    """
+    # 1. Component Analysis
+    toxicity_report = predict_toxicity(ingredients)
+    
+    # 2. Product Scoring
+    final_score, status, detailed_scores = calculate_product_toxicity(
+        toxicity_report, 
+        product_category=category
+    )
+    
+    return {
+        "toxicity_score": final_score,
+        "product_status": status,
+        "detailed_score_breakdown": detailed_scores,
+        "toxicity_report": toxicity_report
+    }
 
 # ... imports ...
 
@@ -108,6 +133,9 @@ def scan_product(req: ProductRequest):
     ingredients = clean_ingredient_list(ingredients)
     # ... rest of the logic ...
     # --- INGREDIENT MATCHING (DEEP TECH) ---
+    # DISABLED: The matcher was incorrectly mapping ingredients (e.g., Retinyl Palmitate -> Retinol).
+    # We want to show exactly what was scanned/fetched.
+    """
     from ingredient_matcher import matcher
     
     canonical_ingredients = []
@@ -125,6 +153,7 @@ def scan_product(req: ProductRequest):
             
     # Use canonical list for analysis
     ingredients = canonical_ingredients
+    """
 
     toxicity = predict_toxicity(ingredients)
 
@@ -405,8 +434,31 @@ class RoutineRequest(BaseModel):
 
 @app.post("/analyze-routine")
 def analyze_routine_endpoint(req: RoutineRequest):
+    # 1. Run deterministic rule-based check
+    from routine_engine import check_routine_compatibility
+    
     products_data = [{"name": p.name, "ingredients": p.ingredients} for p in req.products]
-    return analyze_routine_with_ai(products_data)
+    
+    all_conflicts = []
+    seen_pairs = set()
+    
+    for i, p1 in enumerate(products_data):
+        # Check against all other products
+        others = products_data[:i] + products_data[i+1:]
+        
+        # We can reuse the engine logic: treat p1 as "new product" and others as "current routine"
+        report = check_routine_compatibility(p1['ingredients'], others)
+        
+        for conflict in report['conflicts']:
+            # Avoid duplicates (A vs B and B vs A)
+            p2_name = conflict['with_product']
+            pair = tuple(sorted([p1['name'], p2_name]))
+            if pair not in seen_pairs:
+                seen_pairs.add(pair)
+                all_conflicts.append(conflict)
+
+    # 2. Pass known conflicts to AI for summary and explanation
+    return analyze_routine_with_ai(products_data, rule_based_conflicts=all_conflicts)
 
 
 # --- AI VISION ENDPOINT ---
@@ -525,8 +577,195 @@ async def scan_barcode_image(file: UploadFile = File(...)):
         print(f"Error processing barcode image: {e}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
+# --- SKIN ANALYSIS V2 ENDPOINTS ---
+from skin_engine import analyze_skin_with_ai, get_category_recommendations
+
+@app.post("/analyze-face")
+async def analyze_face_endpoint(file: UploadFile = File(...), uid: str = Depends(get_current_user_uid)):
+    """
+    Analyzes a face image and saves the report to the user's profile.
+    """
+    try:
+        contents = await file.read()
+        
+        # Analyze with AI
+        report = analyze_skin_with_ai(contents)
+        
+        if "error" in report:
+             return JSONResponse(content={"error": report["error"]}, status_code=500)
+
+        # Save to Firestore
+        db = get_db()
+        if db and uid:
+             # Save to subcollection for history
+             db.collection("users").document(uid).collection("skin_reports").add({
+                 "timestamp": datetime.now(),
+                 "report": report
+             })
+             # Update 'latest' for easy access
+             # Inject timestamp into report for frontend
+             report["timestamp"] = datetime.now().isoformat()
+             
+             db.collection("users").document(uid).set({
+                 "latest_skin_report": report,
+                 "last_skin_analysis": datetime.now()
+             }, merge=True)
+             
+        return report
+        
+    except Exception as e:
+        print(f"Face Analysis Error: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+class SkinReportRequest(BaseModel):
+    skin_report: dict
+
+@app.post("/recommend-categories")
+def recommend_categories_endpoint(req: SkinReportRequest):
+    return get_category_recommendations(req.skin_report)
+
+class ProductSuggestionRequest(BaseModel):
+    category: str
+    skin_report: dict
+
+@app.post("/suggest-products")
+def suggest_products_endpoint(req: ProductSuggestionRequest):
+    """
+    Suggests SAFE products from the DB based on category and skin report.
+    """
+    db = get_db()
+    if not db:
+        return {"error": "Database unavailable"}
+        
+    try:
+        # 1. Query products by category (filter toxicity in Python to avoid index requirement)
+        # 1. Query products by category with Case Robustness and Score Relaxation
+        candidates = []
+        
+        def fetch_candidates(category_name, max_score=100):
+            # 1. Exact Category Match
+            docs = db.collection("products")\
+                .where("category", "==", category_name)\
+                .limit(50)\
+                .stream()
+            
+            candidates = []
+            for doc in docs:
+                p = doc.to_dict()
+                if p.get("toxicity_score", 100) < max_score:
+                    candidates.append(p)
+
+            if candidates:
+                return candidates
+
+            # 2. Case-insensitive / Keyword Fallback
+            # Map specific ingredients to their parent categories and keywords
+            # Format: "SearchTerm": ("ParentCategory", "KeywordInName")
+            FALLBACK_MAP = {
+                "Retinol": ("Serum", "Retinol"),
+                "Vitamin C": ("Serum", "Vitamin C"),
+                "Niacinamide": ("Serum", "Niacinamide"),
+                "Exfoliant": ("Toner", "Exfoliant"), # Or Cleanser, but Toner is common for BHA
+                "Bha": ("Toner", "BHA"),
+                "Salicylic Acid": ("Cleanser", "Salicylic")
+            }
+            
+            mapping = FALLBACK_MAP.get(category_name) or FALLBACK_MAP.get(category_name.title()) 
+            
+            if mapping:
+                parent_cat, keyword = mapping
+                # Query parent category
+                parent_docs = db.collection("products")\
+                    .where("category", "==", parent_cat)\
+                    .limit(50)\
+                    .stream()
+                    
+                for doc in parent_docs:
+                    p = doc.to_dict()
+                    name = p.get("product_name", "").lower()
+                    # Filter by toxicity AND keyword in name
+                    if p.get("toxicity_score", 100) < max_score and keyword.lower() in name:
+                        candidates.append(p)
+                        
+            return candidates
+
+        # Attempt 1: Strict Score (<40), Exact Category
+        candidates = fetch_candidates(req.category, 40)
+        
+        # Attempt 2: Strict Score (<40), Title Category
+        if not candidates:
+             candidates = fetch_candidates(req.category.title(), 40)
+             
+        # Attempt 3: Relaxed Score (<60), Exact Category (If curated products have moderate scores)
+        if not candidates:
+             candidates = fetch_candidates(req.category, 60)
+             
+        # Attempt 4: Relaxed Score (<60), Title Category
+        if not candidates:
+             candidates = fetch_candidates(req.category.title(), 60)
+             
+        # Attempt 5: Relaxed Score (<60), Capitalized Category
+        if not candidates:
+             candidates = fetch_candidates(req.category.capitalize(), 60)
+
+        # Fallback: Live scraping is disabled per user request to ensure quality.
+        # if len(candidates) < 3:
+        #     # ... logic removed ...
+            
+        # 2. Filter by skin suitability (using existing logic + extra checks)
+        suitable_products = []
+        skin_type = req.skin_report.get("skin_type", "Normal")
+        
+        for p in candidates:
+            # Check against skin type logic
+            bad_for_skin = check_skin_type_suitability(p.get("ingredients", []), skin_type)
+            
+            # Use specific heuristics from the new V2 logic if needed
+            # For now, just ensure 'bad_for_skin' is empty or manageable
+            if not bad_for_skin:
+                suitable_products.append({
+                    "product_name": p.get("product_name"),
+                    "brand": p.get("brand"),
+                    "toxicity_score": p.get("toxicity_score"),
+                    "image_url": p.get("image_url", ""),
+                    "reason": "Safe and suitable for your skin type."
+                })
+                
+        # Fallback: If strict skin check excludes everything, return top safe products with a disclaimer
+        if not suitable_products and candidates:
+             candidates.sort(key=lambda x: x.get("toxicity_score", 100))
+             for p in candidates[:3]:
+                 suitable_products.append({
+                    "product_name": p.get("product_name"),
+                    "brand": p.get("brand"),
+                    "toxicity_score": p.get("toxicity_score"),
+                    "image_url": p.get("image_url", ""),
+                    "reason": "Top rated in this category."
+                 })
+        
+        return suitable_products[:5]
+        
+    except Exception as e:
+        print(f"Product Suggestion Error: {e}")
+        return {"error": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     import os
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+from incidecoder_client import IncidecoderClient
+
+@app.get("/ingredient-details/{ingredient_name}")
+async def get_ingredient_details(ingredient_name: str):
+    """
+    Fetches detailed ingredient information from Incidecoder.
+    """
+    # Check cache or DB first (future optimization)
+    # For now, fetch directly
+    details = IncidecoderClient.fetch_ingredient_details(ingredient_name)
+    if not details:
+        raise HTTPException(status_code=404, detail="Ingredient details not found")
+    return details

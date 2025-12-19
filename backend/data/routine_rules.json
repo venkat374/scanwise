@@ -1,0 +1,64 @@
+{
+    "conflict_rules": {
+        "Retinol": [
+            "Vitamin C",
+            "AHA",
+            "BHA",
+            "Benzoyl Peroxide"
+        ],
+        "Vitamin C": [
+            "Retinol",
+            "AHA",
+            "BHA",
+            "Niacinamide"
+        ],
+        "AHA": [
+            "Retinol",
+            "Vitamin C",
+            "BHA",
+            "Peptides"
+        ],
+        "BHA": [
+            "Retinol",
+            "Vitamin C",
+            "AHA"
+        ],
+        "Benzoyl Peroxide": [
+            "Retinol",
+            "Vitamin C"
+        ],
+        "Niacinamide": [
+            "Vitamin C"
+        ],
+        "Copper Peptides": [
+            "Vitamin C",
+            "AHA",
+            "BHA",
+            "Retinol"
+        ]
+    },
+    "ingredient_categories": {
+        "retinol": "Retinol",
+        "retinyl palmitate": "Retinol",
+        "retinaldehyde": "Retinol",
+        "tretinoin": "Retinol",
+        "adapalene": "Retinol",
+        "hydroxypinacolone retinoate": "Retinol",
+        "ascorbic acid": "Vitamin C",
+        "l-ascorbic acid": "Vitamin C",
+        "sodium ascorbyl phosphate": "Vitamin C",
+        "magnesium ascorbyl phosphate": "Vitamin C",
+        "tetrahexyldecyl ascorbate": "Vitamin C",
+        "3-o-ethyl ascorbic acid": "Vitamin C",
+        "glycolic acid": "AHA",
+        "lactic acid": "AHA",
+        "mandelic acid": "AHA",
+        "citric acid": "AHA",
+        "salicylic acid": "BHA",
+        "betaine salicylate": "BHA",
+        "benzoyl peroxide": "Benzoyl Peroxide",
+        "niacinamide": "Niacinamide",
+        "copper tripeptide-1": "Copper Peptides",
+        "bis(tripeptide-1) copper acetate": "Copper Peptides"
+    }
+}

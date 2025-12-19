@@ -58,7 +58,7 @@ def explain_ingredient_with_ai(ingredient_name: str, risk_context: str = None):
             "side_effects": "Unknown"
         }
 
-def analyze_routine_with_ai(products: list):
+def analyze_routine_with_ai(products: list, rule_based_conflicts: list = []):
     if not GOOGLE_API_KEY:
         return {"error": "Google API Key not configured."}
 
@@ -68,12 +68,20 @@ def analyze_routine_with_ai(products: list):
     for p in products:
         product_list_str += f"- {p.get('name', 'Unknown')}: {', '.join(p.get('ingredients', []))}\n"
 
+    rule_conflicts_str = ""
+    if rule_based_conflicts:
+        rule_conflicts_str = "KNOWN CONFLICTS (Do not ignore these, explain why they are bad):\n"
+        for c in rule_based_conflicts:
+            rule_conflicts_str += f"- {c['conflict']} in {c['with_product']}: {c['description']}\n"
+
     model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
-    Analyze this skincare routine for ingredient conflicts (e.g. Retinol + Vitamin C, AHAs + Retinol, etc.).
+    Analyze this skincare routine for ingredient conflicts.
     
     Products:
     {product_list_str}
+
+    {rule_conflicts_str}
 
     Return a single JSON object with:
     {{

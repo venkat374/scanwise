@@ -1,0 +1,47 @@
+{
+    "skin_type_rules": {
+        "oily": [
+            "paraffin",
+            "mineral oil",
+            "dimethicone",
+            "coconut oil",
+            "petrolatum",
+            "beeswax"
+        ],
+        "dry": [
+            "alcohol",
+            "sodium laureth sulfate",
+            "benzyl alcohol",
+            "salicylic acid",
+            "clay"
+        ],
+        "sensitive": [
+            "fragrance",
+            "parfum",
+            "linalool",
+            "limonene",
+            "phenoxyethanol",
+            "essential oil",
+            "alcohol denat"
+        ],
+        "combination": [
+            "mineral oil",
+            "dimethicone",
+            "coconut oil"
+        ],
+        "normal": []
+    },
+    "skin_tone_rules": {
+        "dark": [
+            "hydroquinone",
+            "kojic acid",
+            "mercury"
+        ],
+        "light": [
+            "lime oil",
+            "lemon oil",
+            "citrus"
+        ],
+        "medium": []
+    }
+}

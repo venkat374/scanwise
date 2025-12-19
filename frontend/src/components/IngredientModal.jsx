@@ -28,10 +28,8 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
             }
 
             try {
-                const response = await axios.post(`${config.API_BASE_URL}/explain-ingredient`, {
-                    ingredient_name: ingredientName,
-                    risk_context: riskLevel
-                });
+                // Use the new Incidecoder endpoint
+                const response = await axios.get(`${config.API_BASE_URL}/ingredient-details/${encodeURIComponent(ingredientName)}`);
 
                 const newData = response.data;
                 setData(newData);
@@ -42,7 +40,8 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
                 sessionStorage.setItem(cacheKey, JSON.stringify(currentCache));
 
             } catch (err) {
-                setError('Failed to load explanation.');
+                console.error("Failed to fetch details:", err);
+                setError('Failed to load ingredient details.');
             } finally {
                 setLoading(false);
             }
@@ -88,7 +87,7 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-8 space-y-3">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                            <p className="text-sm text-zinc-500 animate-pulse">Consulting AI Expert...</p>
+                            <p className="text-sm text-zinc-500 animate-pulse">Fetching details from Incidecoder...</p>
                         </div>
                     ) : error ? (
                         <div className="text-center py-8 text-red-500">
@@ -99,48 +98,38 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
 
                             {/* Description */}
                             <div>
-                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">What is it?</h4>
-                                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                                    {data.description}
+                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">What It Is</h4>
+                                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                                    {data.description || "No description available."}
                                 </p>
                             </div>
 
-                            {/* Risk Level */}
-                            <div className="flex items-center space-x-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg">
-                                <div className={`p-2 rounded-full ${data.risk_level?.toLowerCase().includes('high') ? 'bg-red-100 text-red-600' :
-                                    data.risk_level?.toLowerCase().includes('moderate') ? 'bg-yellow-100 text-yellow-600' :
-                                        'bg-green-100 text-green-600'
-                                    }`}>
-                                    {data.risk_level?.toLowerCase().includes('high') ? <AlertTriangle size={18} /> :
-                                        data.risk_level?.toLowerCase().includes('moderate') ? <Info size={18} /> :
-                                            <CheckCircle size={18} />}
-                                </div>
+                            {/* Functions */}
+                            {data.functions && data.functions.length > 0 && (
                                 <div>
-                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Risk Level</h4>
-                                    <p className={`text-sm font-medium ${data.risk_level?.toLowerCase().includes('high') ? 'text-red-600 dark:text-red-400' :
-                                        data.risk_level?.toLowerCase().includes('moderate') ? 'text-yellow-600 dark:text-yellow-400' :
-                                            'text-green-600 dark:text-green-400'
-                                        }`}>
-                                        {data.risk_level}
-                                    </p>
+                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">What It Does</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {data.functions.map((func, idx) => (
+                                            <span key={idx} className="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs rounded-full border border-indigo-100 dark:border-indigo-800">
+                                                {func}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Common Uses */}
-                            <div>
-                                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Common Uses</h4>
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                    {data.common_uses}
-                                </p>
-                            </div>
-
-                            {/* Side Effects */}
-                            {data.side_effects && (
-                                <div>
-                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Potential Side Effects</h4>
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 italic">
-                                        {data.side_effects}
-                                    </p>
+                            {/* Quick Facts */}
+                            {data.quick_facts && data.quick_facts.length > 0 && (
+                                <div className="bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg">
+                                    <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Quick Facts</h4>
+                                    <ul className="space-y-1">
+                                        {data.quick_facts.map((fact, idx) => (
+                                            <li key={idx} className="text-sm text-zinc-600 dark:text-zinc-400 flex items-start">
+                                                <span className="mr-2 text-indigo-500">•</span>
+                                                {fact}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             )}
 
@@ -151,7 +140,7 @@ const IngredientModal = ({ ingredientName, riskLevel, onClose }) => {
                 {/* Footer */}
                 <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-center shrink-0">
                     <p className="text-xs text-zinc-400">
-                        AI-generated content. Verify with a professional.
+                        Data sourced from Incidecoder.
                     </p>
                 </div>
 

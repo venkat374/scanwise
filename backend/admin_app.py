@@ -152,7 +152,7 @@ elif page == "Product Manager":
     with col1:
         search_query = st.text_input("Search Products (by name)", "")
     with col2:
-        filter_status = st.radio("Status", ["All", "Active", "Flagged"], index=0, horizontal=True)
+        filter_status = st.radio("Status", ["All", "Pending Review", "Active", "Flagged"], index=1, horizontal=True)
     
     products_ref = db.collection("products")
     query = products_ref
@@ -175,7 +175,10 @@ elif page == "Product Manager":
         d["id"] = doc.id
         # Client-side filtering if search query was used
         if search_query and filter_status != "All":
-            if d.get("db_status", "active") != filter_status.lower():
+            if filter_status == "Pending Review":
+                if d.get("db_status", "active") != "pending_review":
+                    continue
+            elif d.get("db_status", "active") != filter_status.lower():
                 continue
         data.append(d)
         
@@ -215,6 +218,8 @@ elif page == "Product Manager":
                 curr_status = p_data.get("db_status", "active")
                 if curr_status == "flagged":
                     st.warning("⚠️ This product is FLAGGED as suspicious.")
+                elif curr_status == "pending_review":
+                    st.info("🕒 This product is PENDING REVIEW.")
                 else:
                     st.success("✅ This product is ACTIVE.")
 
@@ -234,7 +239,7 @@ elif page == "Product Manager":
                         submitted = st.form_submit_button("Update Product Data")
                     
                     with col_approve:
-                        if curr_status == "flagged":
+                        if curr_status == "flagged" or curr_status == "pending_review":
                             approve_btn = st.form_submit_button("✅ Approve (Set Active)")
                         else:
                             approve_btn = False

@@ -33,7 +33,8 @@ def save_to_firestore(product):
             "image_url": product.get("image", ""),
             "ingredients": product["ingredients"],
             "ingredients_text": ", ".join(product["ingredients"]),
-            "source": "incidecoder",
+            "source": "incidecoder_live",
+            "db_status": "pending_review", # Needs Admin Approval
             "last_updated": firestore.SERVER_TIMESTAMP
         }
         
@@ -122,7 +123,7 @@ def search_products(query):
             # We ONLY cache to local JSON for speed/fallback.
             # We DO NOT save to Firestore here to avoid polluting the global DB with unselected products.
             IncidecoderClient.cache_product(p) # Local JSON
-            # save_to_firestore(p) # DISABLED per user request
+            save_to_firestore(p) # Auto-save to DB (Pending Review)
             
             print(f"DEBUG: Live Result: {p.get('name')}")
             results.append({

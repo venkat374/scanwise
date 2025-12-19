@@ -88,6 +88,10 @@ class IncidecoderClient:
                 name = link.get_text(strip=True)
                 
                 if href and name:
+                    # STRICT FILTER: Only follow actual product links
+                    if "/products/" not in href:
+                        continue
+
                     product_url = f"https://incidecoder.com{href}"
                     # Fetch details immediately to get ingredients
                     details = IncidecoderClient._fetch_product_page_details(product_url)
@@ -105,7 +109,7 @@ class IncidecoderClient:
                         # No, let's keep it but ensure we don't return just the brand.
                         
                         products.append({
-                            "product_name": name,
+                            "name": name, # Standardize on "name" for internal passing/caching
                             "brand": brand_name, 
                             "link": product_url,
                             "image": details.get("image"),

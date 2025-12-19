@@ -2,9 +2,9 @@
 
 ScanWise is a next-generation skincare assistant that combines **Ingredient Safety Analysis** with **AI-Driven Skin Diagnostics**. Unlike extensive skincare encyclopedias, ScanWise analyzes *your* face to understand your unique skin needs (Acne, Dryness, Wrinkles) and recommends safe, non-toxic products that actually work for you.
 
-![ScanWise Dashboard](https://scanwise-five.vercel.app/)
+![ScanWise Dashboard](https://via.placeholder.com/800x400?text=ScanWise+Dashboard+Preview)
 
-## �️ Project Flow & User Journey
+## 🗺️ Project Flow & User Journey
 
 ScanWise guides users through a scientifically backed skincare journey:
 
@@ -49,7 +49,7 @@ ScanWise guides users through a scientifically backed skincare journey:
     *   **Product Score** = Weighted average of ingredient risks + Penalties for "The Dirty Dozen" (Parabens, Sulfates, etc.).
     *   **Smart Filtering**: Automatically hides high-toxicity products from recommendations.
 
-### 3. �️ Robust Backend Architecture
+### 3. 🛡️ Robust Backend Architecture
 *   **FastAPI**: High-performance async Python framework.
 *   **Firebase Firestore**: NoSQL real-time database for user profiles and product catalog.
 *   **Dependency Injection**: Modular design for Authentication, DB access, and AI services.

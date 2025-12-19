@@ -93,12 +93,20 @@ class IncidecoderClient:
                     details = IncidecoderClient._fetch_product_page_details(product_url)
                     
                     if details:
-                        # Extract product_name from details if available (it isn't, usually), 
-                        # or use the link text
+                        brand_name = details.get("brand", "Unknown")
+                        # Filter out bad scrapes where Name == Brand (common Incidecoder glitch)
+                        if name.lower() == brand_name.lower():
+                            continue
+                        # Filter out very short names that are likely junk
+                        if len(name) < 3:
+                            continue
+                            
+                        # If name starts with brand, clean it up optionally? 
+                        # No, let's keep it but ensure we don't return just the brand.
                         
                         products.append({
                             "product_name": name,
-                            "brand": details.get("brand", "Unknown"), 
+                            "brand": brand_name, 
                             "link": product_url,
                             "image": details.get("image"),
                             "ingredients": details.get("ingredients", [])

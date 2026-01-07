@@ -81,20 +81,37 @@ def calculate_product_toxicity(toxicity_report, usage_frequency="daily", amount_
     final_score = base_score * usage_factor
     
     # 4. Safety Override for High-Risk Ingredients
-    # If a product contains a known high-risk toxin (score > 0.8), it should not be "Safe" (Score < 0.3)
-    # even if it's at the bottom of the list.
-    max_individual_score = 0
-    if len(toxicity_report) > 0:
-        max_individual_score = max(item["score"] for item in toxicity_report)
+    # If a product contains a known high-risk toxin (score > 0.8), it should not be "Safe" (Score < 0.3).
+    # However, we distinguish between "Allergens" (Fragrance) and "Critical Toxins" (Parabens, Formaldehyde).
     
-    # If high risk exists, ensure at least MODERATE (0.3) or TOXIC (0.6) range
-    if max_individual_score >= 0.75:
-        # Boost final score to at least 0.45 (Moderate-High)
+    has_critical_toxin = False
+    has_allergen = False
+    
+    # Common allergens that are high-risk but shouldn't fail a product completely
+    allergen_keywords = ["parfum", "fragrance", "perfume", "limonene", "linalool", "geraniol"]
+    
+    if len(toxicity_report) > 0:
+        for item in toxicity_report:
+            if item["score"] >= 0.75:
+                name_lower = item["ingredient"].lower()
+                # Check if it's just a common allergen
+                if any(k in name_lower for k in allergen_keywords):
+                    has_allergen = True
+                else:
+                    # It's a high-risk ingredient that is NOT a common allergen (e.g. Paraben)
+                    has_critical_toxin = True
+
+    # Apply Overrides
+    if has_critical_toxin:
+        # Critical Toxin -> Force HIGH RISK (Toxic)
+        # Score >= 0.60 is TOXIC. Let's ensure it hits 0.65 (Safety 35/100)
+        final_score = max(final_score, 0.65)
+    elif has_allergen:
+        # Allergen Only -> Force MODERATE RISK
+        # Score >= 0.30 is MODERATE. Let's ensure it hits 0.45 (Safety 55/100)
+        # This warns the user but doesn't red-flag the whole product just for smell.
         final_score = max(final_score, 0.45)
-        # If it's REALLY bad (e.g. Hydroquinone), push to Toxic
-        if max_individual_score > 0.9:
-             final_score = max(final_score, 0.65)
-             
+
     # Cap at 1.0
     final_score = min(final_score, 1.0)
 

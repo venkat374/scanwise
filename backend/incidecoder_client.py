@@ -58,7 +58,7 @@ class IncidecoderClient:
             return []
 
     @staticmethod
-    def search_online(query: str, limit: int = 5):
+    def search_online(query: str, limit: int = 15):
         """
         Scrapes Incidecoder for products matching the query.
         Returns a list of product dicts (name, brand, link, image, ingredients).
@@ -74,6 +74,7 @@ class IncidecoderClient:
         try:
             response = httpx.get(url, headers=headers, timeout=10.0, follow_redirects=True)
             if response.status_code != 200:
+                print(f"Incidecoder search failed with status {response.status_code}")
                 return []
 
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -102,7 +103,7 @@ class IncidecoderClient:
                         if name.lower() == brand_name.lower():
                             continue
                         # Filter out very short names that are likely junk
-                        if len(name) < 3:
+                        if len(name) < 2:
                             continue
                             
                         # If name starts with brand, clean it up optionally? 

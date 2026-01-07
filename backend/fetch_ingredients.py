@@ -1,6 +1,8 @@
 import requests
 
 from incidecoder_client import IncidecoderClient
+from toxicity_engine import predict_toxicity
+from product_scoring import calculate_product_toxicity
 
 from firebase_admin import firestore
 from firebase_config import get_db
@@ -26,6 +28,16 @@ def save_to_firestore(product):
         if not existing:
              existing = products_ref.where("product_name", "==", product["name"]).limit(1).get()
 
+        # Calculate Toxicity Score before saving
+        toxicity_report = predict_toxicity(product["ingredients"])
+        # Default usage for auto-fetched products: Daily, Normal, General
+        score, status, detailed_scores = calculate_product_toxicity(
+            toxicity_report, 
+            usage_frequency="daily", 
+            amount_applied="normal", 
+            product_category="general"
+        )
+
         data = {
             "product_name": product["name"],
             "brand": product["brand"],
@@ -33,6 +45,10 @@ def save_to_firestore(product):
             "image_url": product.get("image", ""),
             "ingredients": product["ingredients"],
             "ingredients_text": ", ".join(product["ingredients"]),
+            # Essential for Category Search / Fallback
+            "toxicity_score": score, 
+            "product_status": status,
+            "toxicity_report": toxicity_report,
             "source": "incidecoder_live",
             "db_status": "pending_review", # Needs Admin Approval
             "last_updated": firestore.SERVER_TIMESTAMP

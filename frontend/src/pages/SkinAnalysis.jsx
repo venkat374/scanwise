@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Camera, RefreshCw, AlertTriangle, CheckCircle, Info, ChevronRight, Droplet, Sun, Zap, Loader2, ScanFace } from 'lucide-react';
 import config from '../config';
@@ -19,9 +19,10 @@ export default function SkinAnalysis() {
     const [error, setError] = useState(null);
     const [isRescanning, setIsRescanning] = useState(false);
     const [fetchingProducts, setFetchingProducts] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
 
     // Initial Load from User Profile
-    React.useEffect(() => {
+    useEffect(() => {
         if (userProfile?.latest_skin_report && !report && !isRescanning) {
             setReport(userProfile.latest_skin_report);
             fetchRecommendations(userProfile.latest_skin_report);
@@ -84,12 +85,14 @@ export default function SkinAnalysis() {
 
         try {
             // 1. Upload and Analyze Face
+            setLoadingMessage("Uploading image...");
             const formData = new FormData();
             formData.append('file', image);
 
             const token = currentUser ? await currentUser.getIdToken() : "";
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
+            setLoadingMessage("Analyzing skin...");
             const analysisRes = await axios.post(`${config.API_BASE_URL}/analyze-face`, formData, {
                 headers: {
                     ...headers,
@@ -196,7 +199,7 @@ export default function SkinAnalysis() {
                                         <Button onClick={handleAnalyze} disabled={loading} className="w-full max-w-sm">
                                             {loading ? (
                                                 <>
-                                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analyzing Skin...
+                                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {loadingMessage || "Analyzing..."}
                                                 </>
                                             ) : (
                                                 'Start Analysis'

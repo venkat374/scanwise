@@ -136,6 +136,8 @@ def scan_product(req: ProductRequest):
 
     ingredients = clean_ingredient_list(ingredients)
     # ... rest of the logic ...
+    
+
     # --- INGREDIENT MATCHING (DEEP TECH) ---
     # DISABLED: The matcher was incorrectly mapping ingredients (e.g., Retinyl Palmitate -> Retinol).
     # We want to show exactly what was scanned/fetched.
@@ -608,8 +610,10 @@ async def analyze_face_endpoint(file: UploadFile = File(...), uid: str = Depends
                  "report": report
              })
              # Update 'latest' for easy access
+             # Update 'latest' for easy access
              # Inject timestamp into report for frontend
-             report["timestamp"] = datetime.now().isoformat()
+             ts = datetime.now().isoformat()
+             report["timestamp"] = ts
              
              db.collection("users").document(uid).set({
                  "latest_skin_report": report,
@@ -825,3 +829,34 @@ async def get_ingredient_details(ingredient_name: str):
         details["source"] = "Incidecoder"
 
     return details
+
+@app.post("/fetch-ingredients")
+def fetch_ingredients_endpoint(req: ProductRequest):
+    """
+    Dedicated endpoint to just fetch ingredients (Step 1 of 2).
+    """
+    ingredients = []
+    
+    if req.barcode:
+        # Direct Lookup via Barcode/ID
+        from fetch_ingredients import get_product_by_barcode
+        product_data = get_product_by_barcode(req.barcode)
+        if product_data and product_data.get("ingredients_text"):
+             ingredients = [i.strip() for i in product_data["ingredients_text"].split(",")]
+        else:
+             # Fallback to name search if barcode lookup fails or has no ingredients
+             # Check if we have a name from the barcode lookup or request
+             effective_name = product_data.get("product_name") if product_data else req.product_name
+             if effective_name:
+                ingredients = get_ingredients_from_product(effective_name)
+    else:
+        # Auto Fetch by Name
+        if not req.product_name or not req.product_name.strip():
+             return {"error": "Please enter a product name."}
+        ingredients = get_ingredients_from_product(req.product_name)
+
+    if not ingredients:
+        return {"error": "Ingredients not found.", "ingredients": []}
+
+    ingredients = clean_ingredient_list(ingredients)
+    return {"ingredients": ingredients}

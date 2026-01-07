@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { User, Mail, Moon, Sun, Save, Palette, Droplets } from 'lucide-react';
+import { User, Mail, Moon, Sun, Save, Palette, Droplets, HeartPulse, AlertCircle, Fingerprint } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { motion } from 'framer-motion';
 
 import config from "../config";
 
+const AGE_GROUPS = ["Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
+const SKIN_CONCERNS = ["Acne", "Aging", "Dark Spots", "Redness", "Dryness", "Pores", "Sensitivity", "Texture"];
+
 export default function Profile() {
     const { currentUser, logout, theme, toggleTheme } = useAuth();
     const [skinType, setSkinType] = useState("");
     const [skinTone, setSkinTone] = useState("");
+    const [ageGroup, setAgeGroup] = useState("");
+    const [skinConcerns, setSkinConcerns] = useState([]);
+    const [allergies, setAllergies] = useState("");
+    
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -27,6 +34,9 @@ export default function Profile() {
                 if (res.data) {
                     setSkinType(res.data.skin_type || "");
                     setSkinTone(res.data.skin_tone || "");
+                    setAgeGroup(res.data.age_group || "");
+                    setSkinConcerns(res.data.skin_concerns || []);
+                    setAllergies(Array.isArray(res.data.allergies) ? res.data.allergies.join(", ") : (res.data.allergies || ""));
                 }
             } catch (err) {
                 console.error("Failed to fetch profile", err);
@@ -35,6 +45,14 @@ export default function Profile() {
         }
         fetchProfile();
     }, [currentUser]);
+
+    const toggleConcern = (concern) => {
+        if (skinConcerns.includes(concern)) {
+            setSkinConcerns(skinConcerns.filter(c => c !== concern));
+        } else {
+            setSkinConcerns([...skinConcerns, concern]);
+        }
+    };
 
     async function handleSave() {
         setSaving(true);
@@ -46,6 +64,9 @@ export default function Profile() {
                 email: currentUser.email,
                 skin_type: skinType,
                 skin_tone: skinTone,
+                age_group: ageGroup,
+                skin_concerns: skinConcerns,
+                allergies: allergies.split(",").map(a => a.trim()).filter(a => a),
                 theme_preference: theme
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -88,12 +109,12 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        <div className="p-6 space-y-8">
+                        <div className="p-6 space-y-10">
                             {/* Skin Profile Section */}
                             <div>
-                                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+                                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-6 flex items-center gap-2">
                                     <Droplets size={18} className="text-emerald-500" />
-                                    Skin Profile
+                                    Skin Characteristics
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
@@ -125,8 +146,72 @@ export default function Profile() {
                                             <option value="Dark">Dark</option>
                                         </select>
                                     </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Age Group</label>
+                                        <select
+                                            value={ageGroup}
+                                            onChange={(e) => setAgeGroup(e.target.value)}
+                                            className="input-field bg-zinc-50 dark:bg-zinc-900/50"
+                                        >
+                                            <option value="">Select Age Group</option>
+                                            {AGE_GROUPS.map(age => (
+                                                <option key={age} value={age}>{age}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-6"></div>
+
+                            {/* Concerns & Allergies */}
+                            <div>
+                                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-6 flex items-center gap-2">
+                                    <HeartPulse size={18} className="text-emerald-500" />
+                                    Wellness & Concerns
+                                </h3>
+                                
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">Skin Concerns</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {SKIN_CONCERNS.map(concern => (
+                                                <button
+                                                    key={concern}
+                                                    onClick={() => toggleConcern(concern)}
+                                                    className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
+                                                        skinConcerns.includes(concern)
+                                                            ? 'bg-emerald-600 text-white border-emerald-600' 
+                                                            : 'bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-emerald-500/50'
+                                                    }`}
+                                                >
+                                                    {concern}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                                            known Allergies
+                                            <span className="text-xs text-zinc-500 ml-2 font-normal">(Comma separated)</span>
+                                        </label>
+                                        <div className="relative">
+                                            <AlertCircle className="absolute left-3 top-3 text-zinc-400" size={16} />
+                                            <input 
+                                                type="text"
+                                                value={allergies}
+                                                onChange={(e) => setAllergies(e.target.value)}
+                                                className="input-field pl-10 bg-zinc-50 dark:bg-zinc-900/50"
+                                                placeholder="e.g. Peanuts, Sulfates, Fragrance"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-6"></div>
 
                             {/* Preferences Section */}
                             <div>
@@ -177,3 +262,4 @@ export default function Profile() {
         </div>
     );
 }
+

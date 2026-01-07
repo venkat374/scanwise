@@ -9,7 +9,8 @@ import {
     Menu,
     X,
     Sparkles,
-    ScanFace
+    ScanFace,
+    Heart
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,6 +39,7 @@ export default function Layout({ children }) {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
         { icon: ScanFace, label: 'Skin Analysis', path: '/skin-analysis' },
         { icon: Sparkles, label: 'Routine', path: '/routine' },
+        { icon: Heart, label: 'Saved', path: '/saved' },
         { icon: History, label: 'History', path: '/history' },
         { icon: User, label: 'Profile', path: '/profile' },
     ];

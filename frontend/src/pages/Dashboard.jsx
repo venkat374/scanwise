@@ -57,6 +57,7 @@ export default function Dashboard() {
     const [mode, setMode] = useState('manual'); // 'manual', 'scan', 'history'
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
     const [error, setError] = useState(null);
     const [favMessage, setFavMessage] = useState("");
     const [selectedIngredient, setSelectedIngredient] = useState(null);
@@ -94,11 +95,10 @@ export default function Dashboard() {
     // Helper to analyze directly without relying solely on form state updates (safer)
     const analyzeProductDirectly = async (productData) => {
         setLoading(true);
+        setLoadingMessage("Analyzing product...");
         setError(null);
         setResult(null);
 
-        // Construct payload from passed data + profile defaults
-        const currentProfile = userProfile || {};
         const payload = {
             product_name: productData.product_name || productData.name || "",
             ingredients_list: Array.isArray(productData.ingredients) ? productData.ingredients.join(", ") : (productData.ingredients || ""),
@@ -106,7 +106,7 @@ export default function Dashboard() {
             skin_type: currentProfile.skin_type || formData.skin_type || 'Normal',
             skin_tone: currentProfile.skin_tone || formData.skin_tone || 'Medium',
             age_group: currentProfile.age_group || formData.age_group,
-            skin_concerns: currentProfile.skin_conditions || formData.skin_concerns || [],
+            skin_concerns: currentProfile.skin_concerns || formData.skin_concerns || [],
             allergies: currentProfile.allergies || formData.allergies || []
         };
 
@@ -126,6 +126,7 @@ export default function Dashboard() {
 
     const fetchCategoryProducts = async (category) => {
         setLoading(true);
+        setLoadingMessage(`Loading ${category} products...`);
         try {
             // Re-use suggest-products endpoint but maybe without forcing a skin report if just browsing?
             // Actually, we want recommendations relevant to them if possible, but generic is fine for "Find X".
@@ -188,6 +189,7 @@ export default function Dashboard() {
 
     const handleBarcodeScanned = async (imageBlob) => {
         setLoading(true);
+        setLoadingMessage("Scanning barcode...");
         setShowBarcodeScanner(false);
         const formData = new FormData();
         formData.append('file', imageBlob, 'barcode.jpg');
@@ -231,19 +233,47 @@ export default function Dashboard() {
         };
 
         try {
-            const response = await axios.post(`${config.API_BASE_URL}/scan-product`, payload, { timeout: 60000 });
+            // STEP 1: If no ingredients provided, fetch them first
+            let ingredientsToAnalyze = payload.ingredients_list;
+
+            if (!ingredientsToAnalyze) {
+                setLoadingMessage("Fetching ingredients...");
+                const fetchRes = await axios.post(`${config.API_BASE_URL}/fetch-ingredients`, {
+                    product_name: payload.product_name,
+                    barcode: payload.barcode
+                });
+
+                if (fetchRes.data.error) {
+                    setError(fetchRes.data.error);
+                    setLoading(false);
+                    return;
+                }
+
+                // Construct comma-separated string for the analysis endpoint if needed, 
+                // but analyze endpoint takes 'ingredients_list' string.
+                // The fetch endpoint returns a list.
+                if (Array.isArray(fetchRes.data.ingredients)) {
+                    ingredientsToAnalyze = fetchRes.data.ingredients.join(", ");
+                }
+            }
+
+            // STEP 2: Analyze
+            setLoadingMessage("Analyzing product...");
+
+            // Should we update the payload with the fetched ingredients?
+            // Yes, so scan-product doesn't try to fetch again and potentially fail differently
+            // or do redundant work.
+            const analysisPayload = {
+                ...payload,
+                ingredients_list: ingredientsToAnalyze
+            };
+
+            const response = await axios.post(`${config.API_BASE_URL}/scan-product`, analysisPayload, { timeout: 60000 });
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                // Check Routine Compatibility if logged in
-                // Check Routine Compatibility if logged in
-                // NOTE: /check-routine-compatibility is deprecated. 
-                // We now handle routine analysis in the Routine page or via /analyze-routine with full list.
-                // For now, we skip this check on the dashboard to avoid 404s.
                 let routineData = null;
-
                 setResult({ ...response.data, routine_report: routineData });
-                // Save history logic omitted for brevity, can be re-added if needed
             }
         } catch (err) {
             setError("Failed to connect to the server.");
@@ -257,7 +287,10 @@ export default function Dashboard() {
             const token = await currentUser.getIdToken();
             const res = await axios.post(`${config.API_BASE_URL}/favorites`, {
                 user_id: currentUser.uid,
-                product_name: result.product_name || "Unknown Product"
+                product_name: result.product_name || "Unknown Product",
+                brand: result.brand,
+                ingredients: result.ingredients,
+                image_url: result.image_url
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -405,7 +438,7 @@ export default function Dashboard() {
 
                             <div className="mt-6">
                                 <Button onClick={handleSubmit} disabled={loading} className="w-full">
-                                    {loading ? 'Analyzing...' : 'Analyze Product'}
+                                    {loading ? loadingMessage || 'Analyzing...' : 'Analyze Product'}
                                 </Button>
                             </div>
                             {error && <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">{error}</div>}
@@ -417,8 +450,8 @@ export default function Dashboard() {
                         {loading ? (
                             <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50">
                                 <Loader2 className="w-12 h-12 text-emerald-600 animate-spin mb-6" />
-                                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Analyzing Product...</h3>
-                                <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Checking ingredients against safety database.</p>
+                                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">{loadingMessage || "Analyzing..."}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Please wait while we process the data.</p>
                             </div>
                         ) : !result ? (
                             <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50">
@@ -462,18 +495,26 @@ export default function Dashboard() {
                                         ]}
                                     />
                                     {result.wellness_match && (
-                                        <ScoreCard
-                                            title="Wellness Match"
-                                            score={result.wellness_match.score}
-                                            maxScore={100}
-                                            type="wellness"
-                                            description="Alignment with your skin profile."
-                                            level={result.wellness_match.match_level}
-                                            details={[
-                                                ...result.wellness_match.positive_matches.map(m => `✅ ${m}`),
-                                                ...result.wellness_match.negative_matches.map(m => `⚠️ ${m}`)
-                                            ]}
-                                        />
+                                        <div className="flex flex-col h-full">
+                                            <ScoreCard
+                                                title="Wellness Match"
+                                                score={result.wellness_match.score}
+                                                maxScore={100}
+                                                type="wellness"
+                                                description="How well this product aligns with your specific skin profile."
+                                                level={result.wellness_match.match_level}
+                                                details={[
+                                                    ...result.wellness_match.positive_matches.map(m => ({ text: m, type: 'good' })),
+                                                    ...result.wellness_match.negative_matches.map(m => ({ text: m, type: 'bad' })),
+                                                    ...result.wellness_match.allergy_matches.map(m => ({ text: m, type: 'critical' }))
+                                                ]}
+                                            />
+                                            {/* Context Summary */}
+                                            <div className="mt-2 px-2 text-xs text-center text-muted-foreground">
+                                                Based on your <strong>{formData.skin_type || "Unknown"}</strong> skin
+                                                {formData.skin_concerns?.length > 0 && <span> and concerns: <strong>{formData.skin_concerns.slice(0, 2).join(", ")}{formData.skin_concerns.length > 2 && "..."}</strong></span>}
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
 

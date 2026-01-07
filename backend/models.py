@@ -27,6 +27,7 @@ class FavoriteItem(BaseModel):
     user_id: str
     product_name: str
     brand: Optional[str] = None
+    ingredients: Optional[List[str]] = []
     image_url: Optional[str] = None
     timestamp: datetime = datetime.now()
 

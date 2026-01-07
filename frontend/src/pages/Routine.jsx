@@ -16,6 +16,7 @@ export default function Routine() {
     });
     const [analysis, setAnalysis] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
 
     // Save to localStorage whenever products change
@@ -35,7 +36,8 @@ export default function Routine() {
         }
 
         // Optimistic UI update? No, let's wait for details but maybe show loading?
-        // For now, assume standard flow.
+        setLoading(true);
+        setLoadingMessage(`Fetching details for ${product.product_name}...`);
 
         // Use scan-product to get full details including ingredients
         axios.post(`${config.API_BASE_URL}/scan-product`, {
@@ -55,6 +57,7 @@ export default function Routine() {
                     ingredients: fullProduct.ingredients || []
                 }]);
                 setSearchQuery('');
+                setLoading(false);
             })
             .catch(err => {
                 console.error("Failed to fetch product details", err);
@@ -65,6 +68,7 @@ export default function Routine() {
                     ingredients: []
                 }]);
                 setSearchQuery('');
+                setLoading(false);
             });
     };
 
@@ -78,6 +82,7 @@ export default function Routine() {
     const handleAnalyze = async () => {
         if (products.length < 2) return;
         setLoading(true);
+        setLoadingMessage('Analysis in progress...');
         try {
             const payload = {
                 products: products.map(p => ({
@@ -144,7 +149,7 @@ export default function Routine() {
                                     disabled={products.length < 2 || loading}
                                     className="w-full"
                                 >
-                                    {loading ? 'Analyzing...' : 'Check for Conflicts'}
+                                    {loading ? (loadingMessage || 'Analyzing...') : 'Check for Conflicts'}
                                 </Button>
                                 {products.length < 2 && products.length > 0 && (
                                     <p className="text-xs text-center text-muted-foreground mt-2">

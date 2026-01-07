@@ -93,13 +93,33 @@ export default function ScoreCard({ title, score, maxScore = 100, type = 'safety
                         </button>
 
                         {isExpanded && (
-                            <ul className="space-y-1 mt-3 animate-in slide-in-from-top-1 duration-200">
-                                {props.details.map((detail, idx) => (
-                                    <li key={idx} className="text-xs flex items-start gap-1.5">
-                                        <span className="mt-0.5 block w-1 h-1 rounded-full bg-current opacity-50 shrink-0" />
-                                        <span>{typeof detail === 'string' ? detail : detail.text}</span>
-                                    </li>
-                                ))}
+                            <ul className="space-y-2 mt-3 animate-in slide-in-from-top-1 duration-200">
+                                {props.details.map((detail, idx) => {
+                                    const isObject = typeof detail === 'object';
+                                    const text = isObject ? detail.text : detail;
+                                    const type = isObject ? detail.type : 'neutral';
+
+                                    // Determine icon/color
+                                    let iconColor = "bg-zinc-400";
+                                    let textColor = "text-zinc-600 dark:text-zinc-400";
+                                    if (text.includes("✅") || type === 'good') {
+                                        iconColor = "bg-emerald-500";
+                                        textColor = "text-emerald-700 dark:text-emerald-300";
+                                    } else if (text.includes("⚠️") || type === 'bad') {
+                                        iconColor = "bg-amber-500";
+                                        textColor = "text-amber-700 dark:text-amber-300";
+                                    } else if (text.includes("❌") || type === 'critical') {
+                                        iconColor = "bg-red-500";
+                                        textColor = "text-red-700 dark:text-red-300";
+                                    }
+
+                                    return (
+                                        <li key={idx} className={`text-xs flex items-start gap-2 p-1.5 rounded ${isObject && type !== 'neutral' ? 'bg-zinc-50 dark:bg-zinc-900/50' : ''}`}>
+                                            <span className={`mt-1 block w-1.5 h-1.5 rounded-full ${iconColor} shrink-0`} />
+                                            <span className={textColor}>{text.replace(/^[✅⚠️❌]\s*/, '')}</span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>

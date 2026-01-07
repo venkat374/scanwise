@@ -27,7 +27,21 @@ HERO_INGREDIENTS_DB = {
     "vitamin e": "Antioxidant",
     "tocopherol": "Antioxidant",
     "squalane": "Moisturizing, Barrier repair",
-    "glycerin": "Hydration (superstar)"
+    "glycerin": "Hydration (superstar)",
+    # New inclusions for basic moisturizers
+    "petrolatum": "Occlusive, Moisture lock",
+    "dimethicone": "Occlusive, Skin smoothing",
+    "shea butter": "Emollient, Moisturizing",
+    "butyrospermum parkii": "Emollient, Moisturizing", # Shea butter scientific name
+    "cetearyl alcohol": "Emollient, Texture enhancer",
+    "stearyl alcohol": "Emollient, Texture enhancer",
+    "cetyl alcohol": "Emollient, Texture enhancer",
+    "caprylic/capric triglyceride": "Emollient, Replenishing",
+    "sorbitol": "Humectant, Hydrating",
+    "butylene glycol": "Humectant, Solvent",
+    "aloe barbadensis": "Soothing, Hydrating",
+    "aloe vera": "Soothing, Hydrating",
+    "mineral oil": "Occlusive, Moisture lock"
 }
 
 def calculate_efficacy(ingredients_list, product_category="general"):

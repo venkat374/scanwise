@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Scan, Type, Search, Heart, Share2, Info, X, Sparkles, AlertTriangle, Plus, Loader2 } from 'lucide-react';
+import { Scan, Type, Search, Heart, Share2, Info, X, Sparkles, AlertTriangle, Plus, Loader2, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -22,6 +22,37 @@ export default function Dashboard() {
     const { currentUser, userProfile, profileLoading } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Alternatives features
+    const [showAltModal, setShowAltModal] = useState(false);
+    const [alternatives, setAlternatives] = useState([]);
+    const [altLoading, setAltLoading] = useState(false);
+
+    // Tab State
+    const [activeTab, setActiveTab] = useState('overview'); // overview, indepth
+
+    const handleFindAlternatives = async () => {
+        if (!result) return;
+
+        setShowAltModal(true);
+        setAltLoading(true);
+        setAlternatives([]);
+
+        try {
+            const payload = {
+                category: result.category || formData.category,
+                current_score: result.product_toxicity_score,
+                skin_report: {}
+            };
+
+            const res = await axios.post(`${config.API_BASE_URL}/recommend-alternatives`, payload);
+            setAlternatives(res.data || []);
+        } catch (err) {
+            console.error("Failed to find alternatives", err);
+        } finally {
+            setAltLoading(false);
+        }
+    };
 
     const handleAddToRoutine = () => {
         if (!result) return;
@@ -99,6 +130,7 @@ export default function Dashboard() {
         setError(null);
         setResult(null);
 
+        const currentProfile = userProfile || {}; // Handle null profile
         const payload = {
             product_name: productData.product_name || productData.name || "",
             ingredients_list: Array.isArray(productData.ingredients) ? productData.ingredients.join(", ") : (productData.ingredients || ""),
@@ -470,6 +502,9 @@ export default function Dashboard() {
                                     </div>
                                     {currentUser && (
                                         <div className="flex gap-2">
+                                            <Button onClick={handleFindAlternatives} variant="outline" size="sm" className="hidden sm:flex border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950">
+                                                <Sparkles className="w-4 h-4 mr-2" /> Find Better Alternative
+                                            </Button>
                                             <Button onClick={handleAddToRoutine} variant="outline" size="sm">
                                                 <Plus className="w-4 h-4 mr-2" /> Add to Routine
                                             </Button>
@@ -480,163 +515,275 @@ export default function Dashboard() {
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <ScoreCard
-                                        title="Safety Rating"
-                                        score={Math.round((1 - result.product_toxicity_score) * 100)}
-                                        maxScore={100}
-                                        type="safety"
-                                        description="A measure of how clean the ingredient list is."
-                                        level={result.product_status === 'SAFE' ? 'Clean & Safe' : result.product_status === 'MODERATE' ? 'Moderate Risk' : 'High Risk'}
-                                        details={[
-                                            `Base Ingredient Safety: ${Math.round((1 - (result.detailed_score_breakdown?.base_score || 0)) * 100)}/100`,
-                                            `Usage Adjustment: ${result.detailed_score_breakdown?.usage_factor === 1 ? 'Standard' : result.detailed_score_breakdown?.usage_factor < 1 ? 'Low Usage (Safer)' : 'High Usage (Riskier)'}`,
-                                            result.product_status === 'SAFE' ? 'No high-risk toxins found.' : 'Contains potential irritants.'
-                                        ]}
-                                    />
-                                    {result.wellness_match && (
-                                        <div className="flex flex-col h-full">
-                                            <ScoreCard
-                                                title="Wellness Match"
-                                                score={result.wellness_match.score}
-                                                maxScore={100}
-                                                type="wellness"
-                                                description="How well this product aligns with your specific skin profile."
-                                                level={result.wellness_match.match_level}
-                                                details={[
-                                                    ...result.wellness_match.positive_matches.map(m => ({ text: m, type: 'good' })),
-                                                    ...result.wellness_match.negative_matches.map(m => ({ text: m, type: 'bad' })),
-                                                    ...result.wellness_match.allergy_matches.map(m => ({ text: m, type: 'critical' }))
-                                                ]}
-                                            />
-                                            {/* Context Summary */}
-                                            <div className="mt-2 px-2 text-xs text-center text-muted-foreground">
-                                                Based on your <strong>{formData.skin_type || "Unknown"}</strong> skin
-                                                {formData.skin_concerns?.length > 0 && <span> and concerns: <strong>{formData.skin_concerns.slice(0, 2).join(", ")}{formData.skin_concerns.length > 2 && "..."}</strong></span>}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                                {/* Mobile Button */}
+                                {currentUser && (
+                                    <Button onClick={handleFindAlternatives} variant="outline" size="sm" className="w-full sm:hidden border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950 mb-4">
+                                        <Sparkles className="w-4 h-4 mr-2" /> Find Better Alternative
+                                    </Button>
+                                )}
 
-                                <div className="grid grid-cols-1 gap-6">
-                                    {/* Dupe Card */}
-                                    {result.dupes && result.dupes.length > 0 && (
-                                        <DupeCard dupes={result.dupes} />
-                                    )}
-
-                                    {/* Routine Compatibility Report */}
-                                    {result.routine_report && !result.routine_report.compatible && (
-                                        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
-                                            <div className="flex items-center gap-2 mb-4">
-                                                <AlertTriangle className="text-red-600 dark:text-red-400" size={24} />
-                                                <h3 className="font-semibold text-lg text-red-900 dark:text-red-100">Routine Conflict Detected</h3>
+                                {showAltModal && (
+                                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                                        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+                                            <div className="p-4 border-b border-border flex justify-between items-center">
+                                                <h3 className="font-bold text-lg">Better Alternatives</h3>
+                                                <button onClick={() => setShowAltModal(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+                                                    <X size={20} />
+                                                </button>
                                             </div>
-                                            <div className="space-y-3">
-                                                {result.routine_report.conflicts.map((conflict, idx) => (
-                                                    <div key={idx} className="bg-white dark:bg-red-950/50 p-4 rounded-lg border border-red-100 dark:border-red-900/50">
-                                                        <div className="font-bold text-red-800 dark:text-red-200 mb-1">
-                                                            {conflict.conflict}
-                                                        </div>
-                                                        <div className="text-sm text-red-700 dark:text-red-300 mb-2">
-                                                            Conflict with: <strong>{conflict.with_product}</strong>
-                                                        </div>
-                                                        <p className="text-sm text-red-600 dark:text-red-400">
-                                                            {conflict.description}
-                                                        </p>
+
+                                            <div className="p-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                                                {altLoading ? (
+                                                    <div className="py-8 text-center text-muted-foreground">
+                                                        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />
+                                                        Finding safer products...
                                                     </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Efficacy Report */}
-                                    {result.efficacy_report && (
-                                        <Card title="Efficacy Analysis">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                <div>
-                                                    <div className="flex items-center gap-2 mb-4">
-                                                        <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400">
-                                                            {result.efficacy_report.efficacy_score}
+                                                ) : alternatives.length > 0 ? (
+                                                    <div className="space-y-3">
+                                                        <div className="text-sm text-muted-foreground mb-2">
+                                                            Found {alternatives.length} products in <strong>{result.category}</strong> with better safety ratings.
                                                         </div>
-                                                        <div className="text-sm text-muted-foreground">
-                                                            / 100<br />Efficacy Score
-                                                        </div>
-                                                    </div>
-                                                    {result.efficacy_report.angel_dusting_warning && (
-                                                        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 rounded-lg text-sm text-amber-800 dark:text-amber-200 flex gap-2">
-                                                            <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-                                                            <div>
-                                                                <strong>Potential Angel Dusting:</strong><br />
-                                                                Some active ingredients appear to be in very low concentrations.
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-semibold mb-2 text-sm">Hero Ingredients</h4>
-                                                    <div className="space-y-2">
-                                                        {result.efficacy_report.hero_ingredients && result.efficacy_report.hero_ingredients.length > 0 ? (
-                                                            result.efficacy_report.hero_ingredients.map((hero, idx) => (
-                                                                <div key={idx} className="flex justify-between text-sm border-b border-border pb-1">
-                                                                    <span>{hero.name}</span>
-                                                                    <span className="text-muted-foreground text-xs">{hero.reason}</span>
+                                                        {alternatives.map((alt, idx) => (
+                                                            <div
+                                                                key={idx}
+                                                                onClick={() => { analyzeProductDirectly(alt); setShowAltModal(false); }}
+                                                                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-colors group"
+                                                            >
+                                                                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center flex-shrink-0 text-2xl">
+                                                                    {alt.image_url ? <img src={alt.image_url} alt="" className="w-full h-full object-cover rounded" /> : "🧴"}
                                                                 </div>
-                                                            ))
-                                                        ) : (
-                                                            <p className="text-sm text-muted-foreground">No major hero ingredients detected.</p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    )}
-                                </div>
-
-                                <div className="mt-8">
-                                    <KeyTakeaways result={result} />
-                                </div>
-
-                                <div className="mt-8">
-                                    <Card title="Detailed Analysis">
-                                        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
-                                            <div className="max-h-96 overflow-y-auto custom-scrollbar">
-                                                <table className="w-full text-sm text-left relative">
-                                                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium sticky top-0 z-10 shadow-sm">
-                                                        <tr>
-                                                            <th className="px-4 py-3">Ingredient</th>
-                                                            <th className="px-4 py-3 text-right">Risk Level</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                                        {result.toxicity_report.map((item, idx) => (
-                                                            <tr key={idx} onClick={() => setSelectedIngredient({ name: item.ingredient, risk: item.label })} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 cursor-pointer">
-                                                                <td className="px-4 py-3 font-medium flex items-center gap-2">
-                                                                    <div className={`w-2 h-2 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-500' : item.label === 'LOW RISK' ? 'bg-blue-500' : 'bg-red-500'}`} />
-                                                                    {item.ingredient}
-                                                                </td>
-                                                                <td className="px-4 py-3 text-right">
-                                                                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${item.label === 'SAFE' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                                                                        {item.label}
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="font-medium group-hover:text-primary transition-colors">{alt.product_name}</div>
+                                                                    <div className="text-xs text-muted-foreground">{alt.brand || "Unknown Brand"}</div>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <div className="text-xs font-bold text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded">
+                                                                        {Math.round((1 - alt.toxicity_score) * 100)}% Safe
+                                                                    </div>
+                                                                    <div className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                                                        +{Math.round(((1 - alt.toxicity_score) - (1 - result.product_toxicity_score)) * 100)}% better
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         ))}
-                                                    </tbody>
-                                                </table>
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-center py-8 space-y-3">
+                                                        <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto text-3xl">
+                                                            🏆
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-bold text-lg text-emerald-700 dark:text-emerald-400">Top Choice!</h4>
+                                                            <p className="text-muted-foreground mt-2 px-4">
+                                                                We couldn't find any products in our database with a better safety rating than this one.
+                                                            </p>
+                                                            <p className="text-sm text-slate-500 mt-2">
+                                                                This is currently the safest <strong>{result.category || "product"}</strong> in our ScanWise portfolio.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="p-4 border-t border-border bg-slate-50 dark:bg-slate-950/50 text-right">
+                                                <Button onClick={() => setShowAltModal(false)} variant="ghost" size="sm">
+                                                    Close
+                                                </Button>
                                             </div>
                                         </div>
-                                    </Card>
+                                    </div>
+                                )}
+
+                                {/* Tab Navigation */}
+                                <div className="flex border-b border-border mb-6">
+                                    <button
+                                        onClick={() => setActiveTab('overview')}
+                                        className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+                                    >
+                                        Overview
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('indepth')}
+                                        className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'indepth' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+                                    >
+                                        In-Depth Analysis
+                                    </button>
+                                </div>
+
+                                <div className="min-h-[400px]">
+                                    {activeTab === 'overview' ? (
+                                        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <ScoreCard
+                                                    title="Safety Rating"
+                                                    score={Math.round((1 - result.product_toxicity_score) * 100)}
+                                                    maxScore={100}
+                                                    type="safety"
+                                                    description="A measure of how clean the ingredient list is."
+                                                    level={result.product_status === 'SAFE' ? 'Clean & Safe' : result.product_status === 'MODERATE' ? 'Moderate Risk' : 'High Risk'}
+                                                    details={[
+                                                        `Base Ingredient Safety: ${Math.round((1 - (result.detailed_score_breakdown?.base_score || 0)) * 100)}/100`,
+                                                        `Usage Adjustment: ${result.detailed_score_breakdown?.usage_factor === 1 ? 'Standard' : result.detailed_score_breakdown?.usage_factor < 1 ? 'Low Usage (Safer)' : 'High Usage (Riskier)'}`,
+                                                        result.product_status === 'SAFE' ? 'No high-risk toxins found.' : 'Contains potential irritants.'
+                                                    ]}
+                                                />
+                                                {result.wellness_match && (
+                                                    <div className="flex flex-col h-full">
+                                                        <ScoreCard
+                                                            title="Wellness Match"
+                                                            score={result.wellness_match.score}
+                                                            maxScore={100}
+                                                            type="wellness"
+                                                            description="How well this product aligns with your specific skin profile."
+                                                            level={result.wellness_match.match_level}
+                                                            details={[
+                                                                ...result.wellness_match.positive_matches.map(m => ({ text: m, type: 'good' })),
+                                                                ...result.wellness_match.negative_matches.map(m => ({ text: m, type: 'bad' })),
+                                                                ...result.wellness_match.allergy_matches.map(m => ({ text: m, type: 'critical' }))
+                                                            ]}
+                                                        />
+                                                        {/* Context Summary */}
+                                                        <div className="mt-2 px-2 text-xs text-center text-muted-foreground">
+                                                            Based on your <strong>{formData.skin_type || "Unknown"}</strong> skin
+                                                            {formData.skin_concerns?.length > 0 && <span> and concerns: <strong>{formData.skin_concerns.slice(0, 2).join(", ")}{formData.skin_concerns.length > 2 && "..."}</strong></span>}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                                                <KeyTakeaways result={result} />
+
+
+                                                {/* Routine Conflict Warning (Overview) */}
+                                                {result.routine_report && !result.routine_report.compatible && (
+                                                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mt-6">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <AlertTriangle className="text-red-600 dark:text-red-400 shrink-0" size={20} />
+                                                            <h3 className="font-bold text-sm text-red-900 dark:text-red-100">Routine Conflict</h3>
+                                                        </div>
+                                                        <div className="text-sm text-red-700 dark:text-red-300">
+                                                            This product conflicts with <strong>{result.routine_report.conflicts[0].with_product}</strong> in your routine.
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Dupe Card */}
+                                                {result.dupes && result.dupes.length > 0 && (
+                                                    <div className="mt-6">
+                                                        <DupeCard dupes={result.dupes} />
+                                                    </div>
+                                                )}
+
+                                                {showShareCard && (
+                                                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                                                        <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 relative">
+                                                            <button onClick={() => setShowShareCard(false)} className="absolute top-2 right-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+                                                                <X size={16} />
+                                                            </button>
+                                                            <ShareCard result={result} />
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                            {/* Efficacy & Detailed Breakdown */}
+                                            {result.efficacy_report && (
+                                                <Card title="Efficacy Analysis">
+                                                    <div className="p-6">
+                                                        {(() => {
+                                                            const hasDetails = (result.efficacy_report.hero_ingredients || []).length > 0 || (result.efficacy_report.targeted_concerns || []).length > 0;
+                                                            return (
+                                                                <div className={`flex flex-col ${hasDetails ? 'md:flex-row gap-8 items-start' : 'items-center justify-center gap-4 text-center'}`}>
+                                                                    <div className={`flex-shrink-0 ${hasDetails ? 'text-center mx-auto md:mx-0' : ''}`}>
+                                                                        <div className="text-5xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                                                                            {result.efficacy_report.efficacy_score}
+                                                                        </div>
+                                                                        <div className="text-sm text-muted-foreground uppercase tracking-wider font-semibold">/100</div>
+                                                                        <div className="text-sm font-medium mt-1">Efficacy Score</div>
+                                                                    </div>
+                                                                    {hasDetails && (
+                                                                        <div className="flex-1 w-full space-y-4">
+                                                                            {(result.efficacy_report.hero_ingredients || []).length > 0 && (
+                                                                                <div>
+                                                                                    <div className="flex items-center gap-2 mb-3">
+                                                                                        <Sparkles className="w-4 h-4 text-amber-500" />
+                                                                                        <h4 className="font-semibold text-sm">Hero Ingredients</h4>
+                                                                                    </div>
+                                                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                                                        {result.efficacy_report.hero_ingredients.map((ing, idx) => (
+                                                                                            <div key={idx} className="flex items-center gap-3 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                                                                                                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                                                                                                    <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                                                                                </div>
+                                                                                                <div className="flex-1 min-w-0">
+                                                                                                    <div className="font-medium text-sm text-slate-900 dark:text-slate-100 truncate" title={ing.name}>{ing.name}</div>
+                                                                                                    <div className="text-[11px] text-muted-foreground truncate" title={ing.reason || ing.function}>{ing.reason || ing.function}</div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        ))}
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+
+                                                                            {(result.efficacy_report.targeted_concerns || []).length > 0 && (
+                                                                                <div>
+                                                                                    <h4 className="font-semibold text-sm mb-2">Claim Validation</h4>
+                                                                                    <div className="grid grid-cols-2 gap-2">
+                                                                                        {result.efficacy_report.targeted_concerns.map((concern, idx) => (
+                                                                                            <Badge key={idx} variant="outline" className="justify-center bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-900">
+                                                                                                {concern}
+                                                                                            </Badge>
+                                                                                        ))}
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                </Card>
+                                            )}
+
+                                            <Card title="Detailed Ingredient List">
+                                                <div className="p-2">
+                                                    <div className="max-h-96 overflow-y-auto custom-scrollbar space-y-1">
+                                                        {result.ingredients.map((ing, idx) => (
+                                                            <div
+                                                                key={idx}
+                                                                onClick={() => setSelectedIngredient(ing)}
+                                                                className="flex items-center justify-between p-3 rounded hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors border-b border-border/50 last:border-0"
+                                                            >
+                                                                <span className="font-medium text-sm">{ing}</span>
+                                                                <ChevronRight size={14} className="text-muted-foreground opacity-50" />
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </Card>
+
+                                            {/* Ingredient Modal logic preserved */}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
-                <IngredientModal
-                    ingredientName={selectedIngredient?.name}
-                    riskLevel={selectedIngredient?.risk}
-                    onClose={() => setSelectedIngredient(null)}
-                />
-                {showShareCard && result && <ShareCard product={result} onClose={() => setShowShareCard(false)} />}
+
+                {selectedIngredient && (
+                    <IngredientModal
+                        ingredientName={selectedIngredient.name || selectedIngredient}
+                        riskLevel={selectedIngredient.risk}
+                        onClose={() => setSelectedIngredient(null)}
+                    />
+                )}
+
                 <OnboardingModal isOpen={!!currentUser && !profileLoading && !userProfile?.latest_skin_report && (!userProfile?.age_group || !userProfile?.skin_type)} onClose={() => { }} />
             </div>
         </div>

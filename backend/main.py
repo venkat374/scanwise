@@ -408,18 +408,51 @@ def recommend_alternatives(req: RecommendationRequest):
         return []
     
     try:
-        # Query for products in same category with lower toxicity score (safer)
-        # Limit to 5 results
-        docs = db.collection("products")\
-            .where("category", "==", req.category)\
-            .where("toxicity_score", "<", req.current_score)\
-            .order_by("toxicity_score", direction=firestore.Query.ASCENDING)\
-            .limit(5)\
-            .stream()
+        # Fallback Map (same as in suggest-products)
+        FALLBACK_MAP = {
+            "Retinol": ("Serum", "Retinol"),
+            "Vitamin C": ("Serum", "Vitamin C"),
+            "Vitamin C Serum": ("Serum", "Vitamin C"),
+            "Exfoliant": ("Toner", "Exfoliant"),
+            "Bha": ("Toner", "BHA"),
+            "Salicylic Acid": ("Cleanser", "Salicylic"),
+            "Hyaluronic Acid": ("Serum", "Hyaluronic"),
+            "Moisturizer": ("Moisturizer", "Moisturizer"),
+            "Sunscreen": ("Sunscreen", "Sunscreen")
+        }
+
+        candidates = []
+        
+        # Helper to fetch
+        def query_products(cat_name, max_score):
+             docs = db.collection("products")\
+                .where("category", "==", cat_name)\
+                .where("toxicity_score", "<", max_score)\
+                .order_by("toxicity_score", direction=firestore.Query.ASCENDING)\
+                .limit(5)\
+                .stream()
+             return [d.to_dict() for d in docs]
+             
+        # 1. Try exact category
+        candidates = query_products(req.category, req.current_score)
+        
+        # 2. If no results or generic category, try Fallback Mapping based on implied inputs 
+        # (Since we don't have product name in request, we might need frontend to send it? 
+        # Actually, let's just try Title Case as a basic fix first)
+        if not candidates:
+            candidates = query_products(req.category.title(), req.current_score)
             
+        # 3. If still nothing and category is "General Skincare", return TOP RATED Safe products generally
+        # (This is a simplified approach. Ideally we need the product name to know its true category)
+        if not candidates and (req.category == "General Skincare" or req.category == ""):
+             # Just return 5 safe products from a common category like Moisturizer as a safe bet? 
+             # Or try to query regardless of category?
+             # Firestore requires composite index for query without equality on category.
+             # Let's try "Moisturizer" as a default fallback for generic skincare
+             candidates = query_products("Moisturizer", min(req.current_score, 0.3))
+
         results = []
-        for doc in docs:
-            data = doc.to_dict()
+        for data in candidates:
             results.append({
                 "product_name": data.get("product_name"),
                 "brand": data.get("brand"),

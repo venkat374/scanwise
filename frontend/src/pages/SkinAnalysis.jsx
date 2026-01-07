@@ -164,7 +164,11 @@ export default function SkinAnalysis() {
                                     <div>
                                         <h3 className="font-bold text-lg">Analysis Complete</h3>
                                         <p className="text-sm text-muted-foreground">
-                                            Last updated: {report.timestamp ? new Date(report.timestamp).toLocaleDateString() : "Just now"}
+                                            Last updated: {
+                                                (report.timestamp || userProfile?.last_skin_analysis) ?
+                                                    new Date(report.timestamp || userProfile?.last_skin_analysis).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) :
+                                                    "Just now"
+                                            }
                                         </p>
                                     </div>
 

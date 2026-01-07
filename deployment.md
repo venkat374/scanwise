@@ -26,7 +26,7 @@ We will deploy the FastAPI backend and the Streamlit Admin Portal to Render.
 
 3.  **Environment Variables**:
     *   Scroll down to the "Environment Variables" section and add the following:
-        *   `PYTHON_VERSION`: `3.9.0` (or your local version)
+        *   `PYTHON_VERSION`: `3.11.0` (Recommended)
         *   `GOOGLE_API_KEY`: Your Gemini API Key.
         *   `FIREBASE_CREDENTIALS`: The **content** of your `serviceAccountKey.json` file as a single line string.
         *   `ADMIN_PASSWORD`: Password for the Admin Portal.

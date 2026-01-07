@@ -80,6 +80,21 @@ def calculate_product_toxicity(toxicity_report, usage_frequency="daily", amount_
     # 3. Apply Usage Factor
     final_score = base_score * usage_factor
     
+    # 4. Safety Override for High-Risk Ingredients
+    # If a product contains a known high-risk toxin (score > 0.8), it should not be "Safe" (Score < 0.3)
+    # even if it's at the bottom of the list.
+    max_individual_score = 0
+    if len(toxicity_report) > 0:
+        max_individual_score = max(item["score"] for item in toxicity_report)
+    
+    # If high risk exists, ensure at least MODERATE (0.3) or TOXIC (0.6) range
+    if max_individual_score >= 0.75:
+        # Boost final score to at least 0.45 (Moderate-High)
+        final_score = max(final_score, 0.45)
+        # If it's REALLY bad (e.g. Hydroquinone), push to Toxic
+        if max_individual_score > 0.9:
+             final_score = max(final_score, 0.65)
+             
     # Cap at 1.0
     final_score = min(final_score, 1.0)
 
